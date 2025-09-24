@@ -2,41 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Feastify Design System - Food-inspired colors and styles */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Main backgrounds */
+    --background: 30 20% 99%;
+    --foreground: 20 20% 15%;
 
+    /* Card styles */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 20 20% 15%;
 
+    /* Popover styles */
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 20 20% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary - Warm orange theme */
+    --primary: 25 95% 53%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 25 95% 48%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary - Soft peach */
+    --secondary: 30 40% 96%;
+    --secondary-foreground: 20 20% 25%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted tones */
+    --muted: 30 30% 95%;
+    --muted-foreground: 20 15% 50%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent - Fresh green for veg indicator */
+    --accent: 140 50% 50%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Destructive - Red for non-veg indicator */
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Borders and inputs */
+    --border: 30 20% 88%;
+    --input: 30 20% 88%;
+    --ring: 25 95% 53%;
 
-    --radius: 0.5rem;
+    /* Food app specific styles */
+    --hero-gradient: linear-gradient(135deg, hsl(25 95% 53%), hsl(15 90% 55%));
+    --card-shadow: 0 4px 20px -4px hsl(25 50% 80% / 0.2);
+    --card-shadow-hover: 0 8px 30px -8px hsl(25 50% 70% / 0.3);
+    
+    /* Veg/Non-veg indicators */
+    --veg-green: 140 60% 45%;
+    --non-veg-red: 0 75% 55%;
+    
+    /* Spacing and sizing */
+    --radius: 0.75rem;
+    --radius-sm: 0.5rem;
+    --radius-lg: 1rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -101,5 +121,14 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 }

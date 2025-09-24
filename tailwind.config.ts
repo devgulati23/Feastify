@@ -22,6 +22,13 @@ export default {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          hover: "hsl(var(--primary-hover))",
+        },
+        veg: {
+          DEFAULT: "hsl(var(--veg-green))",
+        },
+        nonveg: {
+          DEFAULT: "hsl(var(--non-veg-red))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
