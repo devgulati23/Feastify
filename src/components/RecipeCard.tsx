@@ -43,11 +43,6 @@ export const RecipeCard = ({ recipe, onViewMore, isBookmarked, onToggleBookmark 
           )}
         </div>
         
-        {/* Food type indicator - top left */}
-        <div className="absolute top-3 left-3">
-          <FoodTypeIndicator isVeg={recipe.vegetarian} />
-        </div>
-        
         {/* Bookmark button - top right */}
         <button
           onClick={(e) => {
@@ -66,27 +61,31 @@ export const RecipeCard = ({ recipe, onViewMore, isBookmarked, onToggleBookmark 
       </div>
       
       <CardContent className="p-4">
+        {/* Food type indicator - moved to top of card content with label */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <FoodTypeIndicator isVeg={recipe.vegetarian} />
+            <span className="text-xs font-medium text-muted-foreground">
+              {recipe.vegetarian ? "VEG" : "NON-VEG"}
+            </span>
+          </div>
+          <div className="flex items-center text-sm text-muted-foreground">
+            <span>{recipe.readyInMinutes} mins</span>
+          </div>
+        </div>
+        
         <h3 className="font-semibold text-lg text-card-foreground mb-2 line-clamp-2 leading-tight">
           {recipe.title}
         </h3>
         
         <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
-          <span>{recipe.readyInMinutes} mins</span>
           <span>{recipe.servings} servings</span>
+          {recipe.cuisines.length > 0 && (
+            <span className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-full">
+              {recipe.cuisines[0]}
+            </span>
+          )}
         </div>
-        
-        {recipe.cuisines.length > 0 && (
-          <div className="flex flex-wrap gap-1 mb-4">
-            {recipe.cuisines.slice(0, 2).map((cuisine) => (
-              <span 
-                key={cuisine}
-                className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-full"
-              >
-                {cuisine}
-              </span>
-            ))}
-          </div>
-        )}
         
         <Button 
           onClick={() => onViewMore(recipe)}

@@ -49,7 +49,7 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
   const carbs = recipe.nutrition?.nutrients?.find(n => n.name === "Carbohydrates");
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-background/80 backdrop-blur-sm"
@@ -57,11 +57,11 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
       />
       
       {/* Modal */}
-      <div className="relative w-full max-w-4xl max-h-[90vh] m-4 bg-background rounded-lg shadow-2xl overflow-hidden">
-        <div className="flex flex-col h-full">
+      <div className="relative w-full max-w-5xl max-h-[95vh] bg-card rounded-lg shadow-2xl overflow-hidden border border-border">
+        <div className="flex flex-col h-full max-h-[95vh]">
           {/* Header */}
           <div className="relative">
-            <div className="aspect-[2/1] overflow-hidden">
+            <div className="aspect-[3/1] overflow-hidden">
               <img
                 src={recipe.image}
                 alt={recipe.title}
@@ -125,7 +125,41 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
           </div>
           
           {/* Content */}
-          <div className="flex-1 overflow-y-auto p-6">
+          <div className="flex-1 overflow-y-auto p-6 bg-card">
+            {/* Recipe Info Bar */}
+            <div className="flex items-center justify-between mb-6 p-4 bg-secondary/50 rounded-lg">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <FoodTypeIndicator isVeg={recipe.vegetarian} />
+                  <span className="text-sm font-medium text-secondary-foreground">
+                    {recipe.vegetarian ? "VEG" : "NON-VEG"}
+                  </span>
+                </div>
+                <div className="flex items-center gap-4 text-secondary-foreground">
+                  <div className="flex items-center gap-1">
+                    <Clock className="w-4 h-4" />
+                    <span className="text-sm font-medium">{recipe.readyInMinutes} mins</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Users className="w-4 h-4" />
+                    <span className="text-sm font-medium">{recipe.servings} servings</span>
+                  </div>
+                </div>
+              </div>
+              {recipe.cuisines.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {recipe.cuisines.map((cuisine) => (
+                    <span 
+                      key={cuisine}
+                      className="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full"
+                    >
+                      {cuisine}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <div className="grid lg:grid-cols-3 gap-6">
               {/* Ingredients */}
               <Card>
