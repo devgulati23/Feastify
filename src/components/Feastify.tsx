@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ChefHat, BookOpen, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "./ThemeToggle";
 import { SearchFilters } from "./SearchFilters";
 import { RecipeCard } from "./RecipeCard";
 import { RecipeModal } from "./RecipeModal";
@@ -190,6 +191,11 @@ export const Feastify = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Fixed Header with Theme Toggle */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
+      
       {/* Hero Section */}
       <div className="relative h-[60vh] overflow-hidden">
         <img 
