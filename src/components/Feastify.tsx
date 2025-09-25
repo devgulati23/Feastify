@@ -203,29 +203,31 @@ export const Feastify = () => {
           alt="Delicious food spread"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/50 to-background/80" />
+        <div className="absolute inset-0 glass" />
         
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center max-w-4xl mx-auto px-6">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <ChefHat className="w-12 h-12 text-primary" />
-              <h1 className="text-4xl lg:text-6xl font-bold text-foreground">
-                Feastify
-              </h1>
-            </div>
-            <p className="text-xl lg:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Discover amazing recipes based on ingredients you have. 
-              Your culinary adventure starts here!
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button variant="hero" size="lg" className="text-lg px-8">
-                <ChefHat className="mr-2 w-5 h-5" />
-                Start Cooking
-              </Button>
-              <Button variant="outline" size="lg" className="text-lg px-8">
-                <BookOpen className="mr-2 w-5 h-5" />
-                View Bookmarks ({bookmarkedRecipes.length})
-              </Button>
+            <div className="glass-light rounded-2xl p-8 mb-8">
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <ChefHat className="w-12 h-12 text-primary" />
+                <h1 className="text-4xl lg:text-6xl font-bold text-foreground">
+                  Feastify
+                </h1>
+              </div>
+              <p className="text-xl lg:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+                Discover amazing recipes based on ingredients you have. 
+                Your culinary adventure starts here!
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button variant="hero" size="lg" className="text-lg px-8">
+                  <ChefHat className="mr-2 w-5 h-5" />
+                  Start Cooking
+                </Button>
+                <Button variant="outline" size="lg" className="text-lg px-8">
+                  <BookOpen className="mr-2 w-5 h-5" />
+                  View Bookmarks ({bookmarkedRecipes.length})
+                </Button>
+              </div>
             </div>
           </div>
         </div>

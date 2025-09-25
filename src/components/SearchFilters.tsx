@@ -39,7 +39,7 @@ export const SearchFilters = ({
   };
 
   return (
-    <div className="bg-card/95 backdrop-blur-sm border-b border-border p-6">
+    <div className="glass border-b border-border p-6">
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Search bar */}
         <form onSubmit={handleSearch} className="relative max-w-2xl mx-auto">

@@ -57,7 +57,7 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
       />
       
       {/* Modal */}
-      <div className="relative w-full max-w-5xl max-h-[95vh] bg-card rounded-lg shadow-2xl overflow-hidden border border-border">
+      <div className="relative w-full max-w-5xl max-h-[95vh] glass rounded-lg shadow-2xl overflow-hidden">
         <div className="flex flex-col h-full max-h-[95vh]">
           {/* Header */}
           <div className="relative">
@@ -75,7 +75,7 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
             <div className="absolute top-4 right-4 flex gap-2">
               <button
                 onClick={() => onToggleBookmark(recipe.id)}
-                className="p-2 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/95 transition-all duration-200"
+                className="p-2 rounded-full glass-light hover:bg-background/95 transition-all duration-200"
               >
                 <Heart 
                   className={cn(
@@ -86,7 +86,7 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
               </button>
               <button
                 onClick={onClose}
-                className="p-2 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/95 transition-all duration-200"
+                className="p-2 rounded-full glass-light hover:bg-background/95 transition-all duration-200"
               >
                 <X className="w-5 h-5 text-foreground" />
               </button>
@@ -114,7 +114,7 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
                   {recipe.cuisines.map((cuisine) => (
                     <span 
                       key={cuisine}
-                      className="px-3 py-1 bg-background/20 backdrop-blur-sm text-background text-sm rounded-full"
+                      className="px-3 py-1 glass-light text-background text-sm rounded-full"
                     >
                       {cuisine}
                     </span>
@@ -127,7 +127,7 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
           {/* Content */}
           <div className="flex-1 overflow-y-auto p-6 bg-card">
             {/* Recipe Info Bar */}
-            <div className="flex items-center justify-between mb-6 p-4 bg-secondary/50 rounded-lg">
+            <div className="flex items-center justify-between mb-6 p-4 glass-light rounded-lg">
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                   <FoodTypeIndicator isVeg={recipe.vegetarian} />

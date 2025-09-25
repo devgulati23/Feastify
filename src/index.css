@@ -49,6 +49,11 @@
     --card-shadow: 0 4px 20px -4px hsl(200 50% 80% / 0.2);
     --card-shadow-hover: 0 8px 30px -8px hsl(200 50% 70% / 0.3);
     
+    /* Glassmorphism styles */
+    --glass-bg: hsl(var(--background) / 0.8);
+    --glass-border: hsl(var(--border) / 0.2);
+    --glass-shadow: 0 8px 32px 0 hsl(var(--foreground) / 0.1);
+    
     /* Veg/Non-veg indicators */
     --veg-green: 140 60% 45%;
     --non-veg-red: 0 75% 55%;
@@ -109,6 +114,11 @@
     --hero-gradient: linear-gradient(135deg, hsl(200 95% 50%), hsl(210 90% 55%));
     --card-shadow: 0 4px 20px -4px hsl(200 50% 20% / 0.4);
     --card-shadow-hover: 0 8px 30px -8px hsl(200 50% 15% / 0.5);
+    
+    /* Dark mode glassmorphism */
+    --glass-bg: hsl(var(--background) / 0.8);
+    --glass-border: hsl(var(--border) / 0.3);
+    --glass-shadow: 0 8px 32px 0 hsl(var(--foreground) / 0.2);
 
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
@@ -137,5 +147,20 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+  
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+  
+  .glass-light {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
   }
 }

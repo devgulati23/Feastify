@@ -26,7 +26,7 @@ export const RecipeCard = ({ recipe, onViewMore, isBookmarked, onToggleBookmark 
   const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
-    <Card className="group overflow-hidden transition-all duration-300 hover:shadow-[var(--card-shadow-hover)] cursor-pointer bg-card">
+    <Card className="group overflow-hidden transition-all duration-300 hover:shadow-[var(--card-shadow-hover)] cursor-pointer glass">
       <div className="relative">
         <div className="aspect-[4/3] overflow-hidden">
           <img
@@ -49,7 +49,7 @@ export const RecipeCard = ({ recipe, onViewMore, isBookmarked, onToggleBookmark 
             e.stopPropagation();
             onToggleBookmark(recipe.id);
           }}
-          className="absolute top-3 right-3 p-2 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/95 transition-all duration-200"
+          className="absolute top-3 right-3 p-2 rounded-full glass-light hover:bg-background/95 transition-all duration-200"
         >
           <Heart 
             className={cn(
