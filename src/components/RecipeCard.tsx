@@ -80,7 +80,7 @@ export const RecipeCard = ({ recipe, onViewMore, isBookmarked, onToggleBookmark 
         
         <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
           <span>{recipe.servings} servings</span>
-          {recipe.cuisines.length > 0 && (
+          {recipe.cuisines && recipe.cuisines.length > 0 && (
             <span className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-full">
               {recipe.cuisines[0]}
             </span>
