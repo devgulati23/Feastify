@@ -95,7 +95,7 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
             <div className="absolute bottom-4 left-4 right-4">
               <div className="flex items-center gap-3 mb-2">
                 <FoodTypeIndicator isVeg={recipe.vegetarian} />
-                <div className="flex items-center gap-4 text-background">
+                <div className="flex items-center gap-4 text-white">
                   <div className="flex items-center gap-1">
                     <Clock className="w-4 h-4" />
                     <span className="text-sm font-medium">{recipe.readyInMinutes} mins</span>
@@ -106,15 +106,15 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
                   </div>
                 </div>
               </div>
-              <h1 className="text-2xl lg:text-3xl font-bold text-background mb-2">
+              <h1 className="text-2xl lg:text-3xl font-bold text-white mb-2">
                 {recipe.title}
               </h1>
-              {recipe.cuisines.length > 0 && (
+              {recipe.cuisines && recipe.cuisines.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {recipe.cuisines.map((cuisine) => (
                     <span 
                       key={cuisine}
-                      className="px-3 py-1 glass-light text-background text-sm rounded-full"
+                      className="px-3 py-1 glass-light text-white text-sm rounded-full"
                     >
                       {cuisine}
                     </span>
@@ -146,7 +146,7 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
                   </div>
                 </div>
               </div>
-              {recipe.cuisines.length > 0 && (
+              {recipe.cuisines && recipe.cuisines.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {recipe.cuisines.map((cuisine) => (
                     <span 
@@ -160,16 +160,16 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
               )}
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Ingredients */}
               <Card>
                 <CardHeader>
-                  <h3 className="text-lg font-semibold">Ingredients</h3>
+                  <h3 className="text-lg font-semibold text-white">Ingredients</h3>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
                     {recipe.extendedIngredients.map((ingredient) => (
-                      <li key={ingredient.id} className="text-sm text-muted-foreground">
+                      <li key={ingredient.id} className="text-sm text-white">
                         • {ingredient.original}
                       </li>
                     ))}
@@ -177,10 +177,10 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
                 </CardContent>
               </Card>
               
-              {/* Instructions */}
-              <Card className="lg:col-span-2">
+              {/* Recipe */}
+              <Card>
                 <CardHeader>
-                  <h3 className="text-lg font-semibold">Instructions</h3>
+                  <h3 className="text-lg font-semibold text-white">Recipe</h3>
                 </CardHeader>
                 <CardContent>
                   {instructions.length > 0 ? (
@@ -190,15 +190,15 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
                           <span className="flex-shrink-0 w-6 h-6 bg-primary text-primary-foreground rounded-full text-xs font-medium flex items-center justify-center">
                             {step.number}
                           </span>
-                          <p className="text-sm text-muted-foreground leading-relaxed">
+                          <p className="text-sm text-white leading-relaxed">
                             {step.step}
                           </p>
                         </li>
                       ))}
                     </ol>
                   ) : (
-                    <p className="text-sm text-muted-foreground">
-                      Instructions not available for this recipe.
+                    <p className="text-sm text-white">
+                      Recipe not available for this dish.
                     </p>
                   )}
                 </CardContent>
@@ -209,26 +209,26 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
             {(calories || protein || carbs) && (
               <Card className="mt-6">
                 <CardHeader>
-                  <h3 className="text-lg font-semibold">Nutrition (per serving)</h3>
+                  <h3 className="text-lg font-semibold text-white">Nutrition (per serving)</h3>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-3 gap-4 text-center">
                     {calories && (
                       <div>
                         <p className="text-lg font-semibold text-primary">{Math.round(calories.amount)}</p>
-                        <p className="text-xs text-muted-foreground">Calories</p>
+                        <p className="text-xs text-white">Calories</p>
                       </div>
                     )}
                     {protein && (
                       <div>
                         <p className="text-lg font-semibold text-primary">{Math.round(protein.amount)}g</p>
-                        <p className="text-xs text-muted-foreground">Protein</p>
+                        <p className="text-xs text-white">Protein</p>
                       </div>
                     )}
                     {carbs && (
                       <div>
                         <p className="text-lg font-semibold text-primary">{Math.round(carbs.amount)}g</p>
-                        <p className="text-xs text-muted-foreground">Carbs</p>
+                        <p className="text-xs text-white">Carbs</p>
                       </div>
                     )}
                   </div>
