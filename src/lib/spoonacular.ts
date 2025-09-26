@@ -3,7 +3,7 @@ const BASE_URL = 'https://api.spoonacular.com/recipes';
 
 export const searchRecipesByIngredients = async (ingredients: string) => {
   const response = await fetch(
-    `${BASE_URL}/findByIngredients?ingredients=${encodeURIComponent(ingredients)}&number=12&apiKey=${SPOONACULAR_API_KEY}`
+    `${BASE_URL}/findByIngredients?ingredients=${encodeURIComponent(ingredients)}&number=12&apiKey=${SPOONACULAR_API_KEY}&fillIngredients=true&addRecipeInformation=true&addRecipeNutrition=true`
   );
   
   if (!response.ok) {
@@ -11,6 +11,19 @@ export const searchRecipesByIngredients = async (ingredients: string) => {
   }
   
   return response.json();
+};
+
+export const getRandomRecipes = async (number: number = 12) => {
+  const response = await fetch(
+    `${BASE_URL}/random?number=${number}&apiKey=${SPOONACULAR_API_KEY}&fillIngredients=true&addRecipeInformation=true&addRecipeNutrition=true`
+  );
+  
+  if (!response.ok) {
+    throw new Error('Failed to fetch recipes');
+  }
+  
+  const data = await response.json();
+  return data.recipes;
 };
 
 export const getRecipeInformation = async (id: number) => {

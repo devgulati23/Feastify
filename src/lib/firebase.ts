@@ -3,13 +3,12 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  // Add your Firebase config here
-  apiKey: "your-api-key",
-  authDomain: "your-project.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project.appspot.com",
-  messagingSenderId: "123456789",
-  appId: "your-app-id"
+  apiKey: "AIzaSyBQ8YzXXzOzOzOzOzOzOzOzOzOzOzOzOzO",
+  authDomain: "feastify-app.firebaseapp.com", 
+  projectId: "feastify-app",
+  storageBucket: "feastify-app.appspot.com",
+  messagingSenderId: "123456789012",
+  appId: "1:123456789012:web:abcdefghijklmnop"
 };
 
 const app = initializeApp(firebaseConfig);

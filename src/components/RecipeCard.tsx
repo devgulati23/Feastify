@@ -13,6 +13,13 @@ interface Recipe {
   readyInMinutes: number;
   servings: number;
   cuisines: string[];
+  nutrition?: {
+    nutrients: Array<{
+      name: string;
+      amount: number;
+      unit: string;
+    }>;
+  };
 }
 
 interface RecipeCardProps {
@@ -24,6 +31,9 @@ interface RecipeCardProps {
 
 export const RecipeCard = ({ recipe, onViewMore, isBookmarked, onToggleBookmark }: RecipeCardProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
+  
+  const calories = recipe.nutrition?.nutrients?.find(n => n.name === "Calories");
+  const protein = recipe.nutrition?.nutrients?.find(n => n.name === "Protein");
 
   return (
     <Card className="group overflow-hidden transition-all duration-300 hover:shadow-[var(--card-shadow-hover)] cursor-pointer glass">
@@ -78,7 +88,7 @@ export const RecipeCard = ({ recipe, onViewMore, isBookmarked, onToggleBookmark 
           {recipe.title}
         </h3>
         
-        <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+        <div className="flex items-center justify-between text-sm text-muted-foreground mb-3">
           <span>{recipe.servings} servings</span>
           {recipe.cuisines && recipe.cuisines.length > 0 && (
             <span className="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded-full">
@@ -86,6 +96,18 @@ export const RecipeCard = ({ recipe, onViewMore, isBookmarked, onToggleBookmark 
             </span>
           )}
         </div>
+        
+        {/* Nutritional Information */}
+        {(calories || protein) && (
+          <div className="flex items-center justify-between text-xs text-muted-foreground mb-4 p-2 bg-secondary/20 rounded">
+            {calories && (
+              <span>{Math.round(calories.amount)} cal</span>
+            )}
+            {protein && (
+              <span>{Math.round(protein.amount)}g protein</span>
+            )}
+          </div>
+        )}
         
         <Button 
           onClick={() => onViewMore(recipe)}

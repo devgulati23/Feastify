@@ -7,112 +7,13 @@ import { RecipeModal } from "./RecipeModal";
 import { useToast } from "@/hooks/use-toast";
 import { auth } from "@/lib/firebase";
 import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
-import { searchRecipesByIngredients } from "@/lib/spoonacular";
+import { searchRecipesByIngredients, getRandomRecipes } from "@/lib/spoonacular";
 import heroImage from "@/assets/hero-food.jpg";
-import butterChicken from "@/assets/butter-chicken.jpg";
-import pastaCarbonara from "@/assets/pasta-carbonara.jpg";
-import friedRice from "@/assets/fried-rice.jpg";
-
-// Mock data for demo (in real app, this would come from Spoonacular API)
-const mockRecipes = [
-  {
-    id: 1,
-    title: "Butter Chicken with Basmati Rice",
-    image: butterChicken,
-    vegetarian: false,
-    readyInMinutes: 45,
-    servings: 4,
-    cuisines: ["Indian"],
-    summary: "Creamy and rich butter chicken curry served with aromatic basmati rice.",
-    extendedIngredients: [
-      { id: 1, original: "1 lb chicken breast, cubed" },
-      { id: 2, original: "1 cup heavy cream" },
-      { id: 3, original: "2 tbsp butter" },
-      { id: 4, original: "1 onion, diced" },
-      { id: 5, original: "3 cloves garlic, minced" },
-      { id: 6, original: "1 tbsp garam masala" },
-      { id: 7, original: "1 can crushed tomatoes" },
-      { id: 8, original: "1 cup basmati rice" }
-    ],
-    analyzedInstructions: [{
-      steps: [
-        { number: 1, step: "Cook basmati rice according to package instructions." },
-        { number: 2, step: "Season chicken with salt and pepper, then cook in a pan until golden." },
-        { number: 3, step: "Sauté onions and garlic until fragrant." },
-        { number: 4, step: "Add garam masala and cook for 1 minute." },
-        { number: 5, step: "Add crushed tomatoes and simmer for 10 minutes." },
-        { number: 6, step: "Stir in cream and butter, add chicken back to pan." },
-        { number: 7, step: "Simmer for 15 minutes until sauce thickens." },
-        { number: 8, step: "Serve over rice and garnish with cilantro." }
-      ]
-    }]
-  },
-  {
-    id: 2,
-    title: "Classic Pasta Carbonara",
-    image: pastaCarbonara,
-    vegetarian: false,
-    readyInMinutes: 20,
-    servings: 2,
-    cuisines: ["Italian"],
-    summary: "Traditional Italian pasta dish with eggs, cheese, and crispy bacon.",
-    extendedIngredients: [
-      { id: 1, original: "200g spaghetti" },
-      { id: 2, original: "100g pancetta or bacon" },
-      { id: 3, original: "2 large eggs" },
-      { id: 4, original: "50g Pecorino Romano cheese" },
-      { id: 5, original: "2 cloves garlic" },
-      { id: 6, original: "Black pepper to taste" }
-    ],
-    analyzedInstructions: [{
-      steps: [
-        { number: 1, step: "Cook spaghetti in salted boiling water until al dente." },
-        { number: 2, step: "Crisp pancetta in a large pan." },
-        { number: 3, step: "Whisk eggs with grated cheese and black pepper." },
-        { number: 4, step: "Drain pasta, reserving 1 cup pasta water." },
-        { number: 5, step: "Add hot pasta to pancetta pan." },
-        { number: 6, step: "Remove from heat and quickly stir in egg mixture." },
-        { number: 7, step: "Add pasta water gradually to create creamy sauce." },
-        { number: 8, step: "Serve immediately with extra cheese and pepper." }
-      ]
-    }]
-  },
-  {
-    id: 3,
-    title: "Vegetable Fried Rice",
-    image: friedRice,
-    vegetarian: true,
-    readyInMinutes: 25,
-    servings: 3,
-    cuisines: ["Chinese"],
-    summary: "Colorful and flavorful fried rice packed with fresh vegetables.",
-    extendedIngredients: [
-      { id: 1, original: "2 cups cooked jasmine rice, cooled" },
-      { id: 2, original: "2 eggs, beaten" },
-      { id: 3, original: "1 cup mixed vegetables (carrots, peas, corn)" },
-      { id: 4, original: "3 green onions, sliced" },
-      { id: 5, original: "3 tbsp soy sauce" },
-      { id: 6, original: "2 tbsp sesame oil" },
-      { id: 7, original: "2 cloves garlic, minced" }
-    ],
-    analyzedInstructions: [{
-      steps: [
-        { number: 1, step: "Heat oil in a large wok or skillet over high heat." },
-        { number: 2, step: "Scramble eggs and set aside." },
-        { number: 3, step: "Stir-fry garlic until fragrant." },
-        { number: 4, step: "Add mixed vegetables and cook for 2-3 minutes." },
-        { number: 5, step: "Add cold rice, breaking up any clumps." },
-        { number: 6, step: "Stir in soy sauce and sesame oil." },
-        { number: 7, step: "Add scrambled eggs back to the pan." },
-        { number: 8, step: "Garnish with green onions and serve hot." }
-      ]
-    }]
-  }
-];
+import feastifyLogo from "@/assets/feastify-logo.jpeg";
 
 export const Feastify = () => {
-  const [recipes, setRecipes] = useState(mockRecipes);
-  const [filteredRecipes, setFilteredRecipes] = useState(mockRecipes);
+  const [recipes, setRecipes] = useState([]);
+  const [filteredRecipes, setFilteredRecipes] = useState([]);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bookmarkedRecipes, setBookmarkedRecipes] = useState<number[]>([]);
@@ -123,7 +24,7 @@ export const Feastify = () => {
   const [user, setUser] = useState(null);
   const { toast } = useToast();
 
-  // Load bookmarks from localStorage and auth state
+  // Load bookmarks from localStorage, auth state, and initial recipes
   useEffect(() => {
     const saved = localStorage.getItem("feastify-bookmarks");
     if (saved) {
@@ -133,6 +34,25 @@ export const Feastify = () => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user);
     });
+
+    // Load initial random recipes
+    const loadInitialRecipes = async () => {
+      setIsLoading(true);
+      try {
+        const initialRecipes = await getRandomRecipes(12);
+        setRecipes(initialRecipes);
+      } catch (error) {
+        console.error("Failed to load initial recipes:", error);
+        toast({
+          title: "Loading Error",
+          description: "Failed to load initial recipes. Please try again.",
+          variant: "destructive",
+        });
+      }
+      setIsLoading(false);
+    };
+
+    loadInitialRecipes();
 
     return () => unsubscribe();
   }, []);
@@ -239,7 +159,7 @@ export const Feastify = () => {
 
   const handleViewBookmarks = () => {
     // Show only bookmarked recipes
-    const bookmarked = mockRecipes.filter(recipe => bookmarkedRecipes.includes(recipe.id));
+    const bookmarked = recipes.filter(recipe => bookmarkedRecipes.includes(recipe.id));
     setFilteredRecipes(bookmarked);
     setSearchQuery("Bookmarked Recipes");
   };
@@ -267,10 +187,11 @@ export const Feastify = () => {
           <div className="text-center max-w-4xl mx-auto px-6">
             <div className="glass-light rounded-2xl p-8 mb-8">
               <div className="flex items-center justify-center gap-3 mb-6">
-                <ChefHat className="w-12 h-12 text-primary" />
-                <h1 className="text-4xl lg:text-6xl font-bold text-foreground">
-                  Feastify
-                </h1>
+                <img 
+                  src={feastifyLogo} 
+                  alt="Feastify" 
+                  className="h-16 lg:h-20 w-auto object-contain"
+                />
               </div>
               <p className="text-xl lg:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
                 Discover amazing recipes based on ingredients you have. 
