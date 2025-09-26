@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { ChefHat, BookOpen, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "./ThemeToggle";
+import { ChefHat, Loader2 } from "lucide-react";
+import { Navbar } from "./Navbar";
 import { SearchFilters } from "./SearchFilters";
 import { RecipeCard } from "./RecipeCard";
 import { RecipeModal } from "./RecipeModal";
 import { useToast } from "@/hooks/use-toast";
+import { auth } from "@/lib/firebase";
+import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
+import { searchRecipesByIngredients } from "@/lib/spoonacular";
 import heroImage from "@/assets/hero-food.jpg";
 import butterChicken from "@/assets/butter-chicken.jpg";
 import pastaCarbonara from "@/assets/pasta-carbonara.jpg";
@@ -118,14 +120,21 @@ export const Feastify = () => {
   const [selectedDiet, setSelectedDiet] = useState("all");
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [user, setUser] = useState(null);
   const { toast } = useToast();
 
-  // Load bookmarks from localStorage
+  // Load bookmarks from localStorage and auth state
   useEffect(() => {
     const saved = localStorage.getItem("feastify-bookmarks");
     if (saved) {
       setBookmarkedRecipes(JSON.parse(saved));
     }
+
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user);
+    });
+
+    return () => unsubscribe();
   }, []);
 
   // Apply filters
@@ -153,14 +162,20 @@ export const Feastify = () => {
     setIsLoading(true);
     setSearchQuery(ingredients);
     
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    if (ingredients.trim()) {
-      // In a real app, this would be an API call to Spoonacular
+    try {
+      if (ingredients.trim()) {
+        const results = await searchRecipesByIngredients(ingredients);
+        setRecipes(results);
+        toast({
+          title: "Search Complete",
+          description: `Found ${results.length} recipes with your ingredients.`,
+        });
+      }
+    } catch (error) {
       toast({
-        title: "Search Feature",
-        description: "In a real app, this would search recipes by ingredients using the Spoonacular API. For now, showing sample recipes.",
+        title: "Search Error",
+        description: "Failed to search recipes. Please try again.",
+        variant: "destructive",
       });
     }
     
@@ -189,21 +204,64 @@ export const Feastify = () => {
     setIsModalOpen(true);
   };
 
+  const handleSignIn = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      await signInWithPopup(auth, provider);
+      toast({
+        title: "Signed In",
+        description: "Successfully signed in with Google.",
+      });
+    } catch (error) {
+      toast({
+        title: "Sign In Error",
+        description: "Failed to sign in. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      toast({
+        title: "Signed Out",
+        description: "Successfully signed out.",
+      });
+    } catch (error) {
+      toast({
+        title: "Sign Out Error",
+        description: "Failed to sign out. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleViewBookmarks = () => {
+    // Show only bookmarked recipes
+    const bookmarked = mockRecipes.filter(recipe => bookmarkedRecipes.includes(recipe.id));
+    setFilteredRecipes(bookmarked);
+    setSearchQuery("Bookmarked Recipes");
+  };
+
   return (
     <div className="min-h-screen bg-background">
-      {/* Fixed Header with Theme Toggle */}
-      <div className="fixed top-4 right-4 z-50">
-        <ThemeToggle />
-      </div>
+      {/* Navigation Bar */}
+      <Navbar 
+        bookmarkedCount={bookmarkedRecipes.length}
+        onViewBookmarks={handleViewBookmarks}
+        user={user}
+        onSignIn={handleSignIn}
+        onSignOut={handleSignOut}
+      />
       
       {/* Hero Section */}
-      <div className="relative h-[60vh] overflow-hidden">
+      <div className="relative h-[60vh] overflow-hidden mt-20">
         <img 
           src={heroImage} 
           alt="Delicious food spread"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 glass" />
         
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center max-w-4xl mx-auto px-6">
@@ -218,16 +276,6 @@ export const Feastify = () => {
                 Discover amazing recipes based on ingredients you have. 
                 Your culinary adventure starts here!
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button variant="hero" size="lg" className="text-lg px-8">
-                  <ChefHat className="mr-2 w-5 h-5" />
-                  Start Cooking
-                </Button>
-                <Button variant="outline" size="lg" className="text-lg px-8">
-                  <BookOpen className="mr-2 w-5 h-5" />
-                  View Bookmarks ({bookmarkedRecipes.length})
-                </Button>
-              </div>
             </div>
           </div>
         </div>

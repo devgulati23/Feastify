@@ -18,10 +18,10 @@
     --popover: 0 0% 100%;
     --popover-foreground: 20 20% 15%;
 
-    /* Primary - Modern teal/blue theme */
-    --primary: 200 95% 45%;
+    /* Primary - Modern orange theme */
+    --primary: 25 95% 53%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 200 95% 40%;
+    --primary-hover: 25 95% 48%;
 
     /* Secondary - Light blue-gray */
     --secondary: 210 40% 96%;
@@ -42,10 +42,10 @@
     /* Borders and inputs */
     --border: 210 20% 88%;
     --input: 210 20% 88%;
-    --ring: 200 95% 45%;
+    --ring: 25 95% 53%;
 
     /* Food app specific styles */
-    --hero-gradient: linear-gradient(135deg, hsl(200 95% 45%), hsl(210 90% 50%));
+    --hero-gradient: linear-gradient(135deg, hsl(25 95% 53%), hsl(35 90% 58%));
     --card-shadow: 0 4px 20px -4px hsl(200 50% 80% / 0.2);
     --card-shadow-hover: 0 8px 30px -8px hsl(200 50% 70% / 0.3);
     
@@ -90,9 +90,9 @@
     --popover: 200 15% 12%;
     --popover-foreground: 210 40% 95%;
 
-    --primary: 200 95% 50%;
-    --primary-foreground: 200 20% 10%;
-    --primary-hover: 200 95% 45%;
+    --primary: 25 95% 58%;
+    --primary-foreground: 25 20% 10%;
+    --primary-hover: 25 95% 53%;
 
     --secondary: 200 20% 20%;
     --secondary-foreground: 210 40% 85%;
@@ -108,10 +108,10 @@
 
     --border: 200 20% 25%;
     --input: 200 20% 25%;
-    --ring: 200 95% 50%;
+    --ring: 25 95% 58%;
     
     /* Dark mode specific overrides */
-    --hero-gradient: linear-gradient(135deg, hsl(200 95% 50%), hsl(210 90% 55%));
+    --hero-gradient: linear-gradient(135deg, hsl(25 95% 58%), hsl(35 90% 63%));
     --card-shadow: 0 4px 20px -4px hsl(200 50% 20% / 0.4);
     --card-shadow-hover: 0 8px 30px -8px hsl(200 50% 15% / 0.5);
     

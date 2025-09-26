@@ -43,21 +43,23 @@ export const SearchFilters = ({
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Search bar */}
         <form onSubmit={handleSearch} className="relative max-w-2xl mx-auto">
-          <Input
-            type="text"
-            placeholder="Enter ingredients (e.g., chicken, tomato, onion)..."
-            value={ingredients}
-            onChange={(e) => setIngredients(e.target.value)}
-            className="pl-12 pr-4 py-3 text-base rounded-lg border-2 focus:border-primary"
-          />
-          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
-          <Button 
-            type="submit" 
-            variant="hero" 
-            className="absolute right-2 top-1/2 transform -translate-y-1/2"
-          >
-            Search
-          </Button>
+          <div className="relative">
+            <Input
+              type="text"
+              placeholder="Enter ingredients (e.g., chicken, tomato, onion)..."
+              value={ingredients}
+              onChange={(e) => setIngredients(e.target.value)}
+              className="pl-12 pr-20 py-3 text-base rounded-lg border-2 focus:border-primary glass-light"
+            />
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
+            <Button 
+              type="submit" 
+              size="sm"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 h-8 px-3"
+            >
+              <Search className="w-4 h-4" />
+            </Button>
+          </div>
         </form>
 
         {/* Filters */}
