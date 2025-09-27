@@ -39,7 +39,7 @@ export const Feastify = () => {
     const loadInitialRecipes = async () => {
       setIsLoading(true);
       try {
-        const initialRecipes = await getRandomRecipes(12);
+        const initialRecipes = await getRandomRecipes(24);
         setRecipes(initialRecipes);
       } catch (error) {
         console.error("Failed to load initial recipes:", error);
@@ -64,7 +64,9 @@ export const Feastify = () => {
     // Cuisine filter
     if (selectedCuisine !== "All") {
       filtered = filtered.filter(recipe => 
-        recipe.cuisines.includes(selectedCuisine)
+        recipe.cuisines && recipe.cuisines.some(cuisine => 
+          cuisine.toLowerCase().includes(selectedCuisine.toLowerCase())
+        )
       );
     }
 

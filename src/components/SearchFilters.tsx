@@ -18,9 +18,9 @@ const cuisines = [
   "Italian", 
   "Chinese", 
   "Mexican", 
-  "Thai", 
-  "Mediterranean",
   "American",
+  "Thai", 
+  "French",
   "Japanese"
 ];
 

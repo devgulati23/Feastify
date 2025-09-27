@@ -16,16 +16,49 @@ export const searchRecipesByIngredients = async (ingredients: string) => {
 };
 
 export const getRandomRecipes = async (number: number = 12) => {
-  const response = await fetch(
-    `${BASE_URL}/random?number=${number}&apiKey=${SPOONACULAR_API_KEY}&fillIngredients=true&addRecipeInformation=true&addRecipeNutrition=true`
-  );
+  // Get recipes from different cuisines to ensure variety
+  const cuisines = ['indian', 'italian', 'chinese', 'mexican', 'american', 'thai', 'french', 'japanese'];
+  const recipesPerCuisine = Math.ceil(number / cuisines.length);
   
-  if (!response.ok) {
-    throw new Error('Failed to fetch recipes');
+  const allRecipes = [];
+  
+  for (const cuisine of cuisines) {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/complexSearch?cuisine=${cuisine}&number=${recipesPerCuisine}&apiKey=${SPOONACULAR_API_KEY}&addRecipeInformation=true&fillIngredients=true&addRecipeNutrition=true`
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        // Add cuisine info to each recipe if not present
+        const recipesWithCuisine = data.results.map(recipe => ({
+          ...recipe,
+          cuisines: recipe.cuisines || [cuisine]
+        }));
+        allRecipes.push(...recipesWithCuisine);
+      }
+    } catch (error) {
+      console.warn(`Failed to fetch ${cuisine} recipes:`, error);
+    }
   }
   
-  const data = await response.json();
-  return data.recipes;
+  // If we don't have enough recipes, fall back to random
+  if (allRecipes.length < number) {
+    try {
+      const response = await fetch(
+        `${BASE_URL}/random?number=${number - allRecipes.length}&apiKey=${SPOONACULAR_API_KEY}&fillIngredients=true&addRecipeInformation=true&addRecipeNutrition=true`
+      );
+      
+      if (response.ok) {
+        const data = await response.json();
+        allRecipes.push(...data.recipes);
+      }
+    } catch (error) {
+      console.warn('Failed to fetch random recipes:', error);
+    }
+  }
+  
+  return allRecipes.slice(0, number);
 };
 
 export const getRecipeInformation = async (id: number) => {
