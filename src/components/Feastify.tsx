@@ -39,7 +39,7 @@ export const Feastify = () => {
     const loadInitialRecipes = async () => {
       setIsLoading(true);
       try {
-        const initialRecipes = await getRandomRecipes(24);
+        const initialRecipes = await getRandomRecipes(); // Get all available recipes
         setRecipes(initialRecipes);
       } catch (error) {
         console.error("Failed to load initial recipes:", error);

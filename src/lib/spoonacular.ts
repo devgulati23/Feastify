@@ -16,9 +16,9 @@ export const searchRecipesByIngredients = async (ingredients: string) => {
 };
 
 export const getRandomRecipes = async (number: number = 12) => {
-  // Get recipes from different cuisines to ensure variety
+  // Get many recipes from different cuisines to show variety
   const cuisines = ['indian', 'italian', 'chinese', 'mexican', 'american', 'thai', 'french', 'japanese'];
-  const recipesPerCuisine = Math.ceil(number / cuisines.length);
+  const recipesPerCuisine = 20; // Fetch 20 recipes per cuisine for good variety
   
   const allRecipes = [];
   
@@ -42,7 +42,7 @@ export const getRandomRecipes = async (number: number = 12) => {
     }
   }
   
-  return allRecipes.slice(0, number);
+  return allRecipes; // Return all fetched recipes, don't limit by number
 };
 
 export const getRecipeInformation = async (id: number) => {
