@@ -1,4 +1,6 @@
-const SPOONACULAR_API_KEY = '1837ae4d0d5c47dd8a92f66c69ebefee';
+const SPOONACULAR_API_KEY = "YOUR_KEY_HERE";
+const EDAMAM_APP_ID = "YOUR_APP_ID";
+const EDAMAM_API_KEY = "YOUR_KEY_HERE";
 const BASE_URL = 'https://api.spoonacular.com/recipes';
 
 export const searchRecipesByIngredients = async (ingredients: string) => {
