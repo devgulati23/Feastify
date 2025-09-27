@@ -1,4 +1,4 @@
-const SPOONACULAR_API_KEY = "YOUR_KEY_HERE";
+const SPOONACULAR_API_KEY = "1837ae4d0d5c47dd8a92f66c69ebefee";
 const EDAMAM_APP_ID = "7849275a";
 const EDAMAM_API_KEY = "43c9b259e181fe6f1d005dbdfdc684be";
 const BASE_URL = 'https://api.spoonacular.com/recipes';
