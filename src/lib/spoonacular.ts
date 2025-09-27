@@ -42,22 +42,6 @@ export const getRandomRecipes = async (number: number = 12) => {
     }
   }
   
-  // If we don't have enough recipes, fall back to random
-  if (allRecipes.length < number) {
-    try {
-      const response = await fetch(
-        `${BASE_URL}/random?number=${number - allRecipes.length}&apiKey=${SPOONACULAR_API_KEY}&fillIngredients=true&addRecipeInformation=true&addRecipeNutrition=true`
-      );
-      
-      if (response.ok) {
-        const data = await response.json();
-        allRecipes.push(...data.recipes);
-      }
-    } catch (error) {
-      console.warn('Failed to fetch random recipes:', error);
-    }
-  }
-  
   return allRecipes.slice(0, number);
 };
 
