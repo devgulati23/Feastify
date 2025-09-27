@@ -16,33 +16,37 @@ export const searchRecipesByIngredients = async (ingredients: string) => {
 };
 
 export const getRandomRecipes = async (number: number = 12) => {
-  // Get many recipes from different cuisines to show variety
+  // Get ALL available recipes from different cuisines
   const cuisines = ['indian', 'italian', 'chinese', 'mexican', 'american', 'thai', 'french', 'japanese'];
-  const recipesPerCuisine = 20; // Fetch 20 recipes per cuisine for good variety
+  const maxRecipesPerCuisine = 100; // Maximum allowed by Spoonacular API
   
   const allRecipes = [];
   
   for (const cuisine of cuisines) {
     try {
       const response = await fetch(
-        `${BASE_URL}/complexSearch?cuisine=${cuisine}&number=${recipesPerCuisine}&apiKey=${SPOONACULAR_API_KEY}&addRecipeInformation=true&fillIngredients=true&addRecipeNutrition=true`
+        `${BASE_URL}/complexSearch?cuisine=${cuisine}&number=${maxRecipesPerCuisine}&apiKey=${SPOONACULAR_API_KEY}&addRecipeInformation=true&fillIngredients=true&addRecipeNutrition=true`
       );
       
       if (response.ok) {
         const data = await response.json();
+        console.log(`Fetched ${data.results.length} ${cuisine} recipes`);
         // Add cuisine info to each recipe if not present
         const recipesWithCuisine = data.results.map(recipe => ({
           ...recipe,
           cuisines: recipe.cuisines || [cuisine]
         }));
         allRecipes.push(...recipesWithCuisine);
+      } else {
+        console.error(`Failed to fetch ${cuisine} recipes:`, response.status, response.statusText);
       }
     } catch (error) {
-      console.warn(`Failed to fetch ${cuisine} recipes:`, error);
+      console.error(`Error fetching ${cuisine} recipes:`, error);
     }
   }
   
-  return allRecipes; // Return all fetched recipes, don't limit by number
+  console.log(`Total recipes fetched: ${allRecipes.length}`);
+  return allRecipes; // Return ALL fetched recipes
 };
 
 export const getRecipeInformation = async (id: number) => {
