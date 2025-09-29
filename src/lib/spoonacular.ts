@@ -15,9 +15,26 @@ export const searchRecipesByIngredients = async (ingredients: string) => {
   return response.json();
 };
 
+export const searchRecipesByName = async (dishName: string) => {
+  const response = await fetch(
+    `${BASE_URL}/complexSearch?query=${encodeURIComponent(dishName)}&number=50&apiKey=${SPOONACULAR_API_KEY}&addRecipeInformation=true&fillIngredients=true&addRecipeNutrition=true`
+  );
+  
+  if (!response.ok) {
+    throw new Error('Failed to search recipes by name');
+  }
+  
+  const data = await response.json();
+  return data.results;
+};
+
 export const getRandomRecipes = async (number: number = 12) => {
   // Get ALL available recipes from different cuisines
-  const cuisines = ['indian', 'italian', 'chinese', 'mexican', 'american', 'thai', 'french', 'japanese'];
+  const cuisines = [
+    'indian', 'italian', 'chinese', 'mexican', 'american', 'thai', 'french', 'japanese',
+    'korean', 'mediterranean', 'middle eastern', 'spanish', 'greek', 'vietnamese', 
+    'british', 'german', 'turkish', 'lebanese', 'moroccan', 'brazilian'
+  ];
   const maxRecipesPerCuisine = 100; // Maximum allowed by Spoonacular API
   
   const allRecipes = [];
