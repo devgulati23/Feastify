@@ -7,7 +7,7 @@ import { RecipeModal } from "./RecipeModal";
 import { useToast } from "@/hooks/use-toast";
 import { auth } from "@/lib/firebase";
 import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
-import { searchRecipesByIngredients, searchRecipesByName, getRandomRecipes } from "@/lib/spoonacular";
+import { searchRecipes, getRandomRecipes } from "@/lib/spoonacular";
 import heroImage from "@/assets/hero-food.jpg";
 import feastifyLogo from "@/assets/feastify-logo.jpeg";
 
@@ -80,47 +80,23 @@ export const Feastify = () => {
     setFilteredRecipes(filtered);
   }, [recipes, selectedCuisine, selectedDiet]);
 
-  const handleSearch = async (ingredients: string) => {
+  const handleSearch = async (query: string) => {
     setIsLoading(true);
-    setSearchQuery(ingredients);
+    setSearchQuery(query);
     
     try {
-      if (ingredients.trim()) {
-        const results = await searchRecipesByIngredients(ingredients);
+      if (query.trim()) {
+        const results = await searchRecipes(query);
         setRecipes(results);
         toast({
           title: "Search Complete",
-          description: `Found ${results.length} recipes with your ingredients.`,
+          description: `Found ${results.length} recipes for "${query}".`,
         });
       }
     } catch (error) {
       toast({
         title: "Search Error",
         description: "Failed to search recipes. Please try again.",
-        variant: "destructive",
-      });
-    }
-    
-    setIsLoading(false);
-  };
-
-  const handleSearchByName = async (dishName: string) => {
-    setIsLoading(true);
-    setSearchQuery(dishName);
-    
-    try {
-      if (dishName.trim()) {
-        const results = await searchRecipesByName(dishName);
-        setRecipes(results);
-        toast({
-          title: "Search Complete",
-          description: `Found ${results.length} recipes for "${dishName}".`,
-        });
-      }
-    } catch (error) {
-      toast({
-        title: "Search Error", 
-        description: "Failed to search recipes by name. Please try again.",
         variant: "destructive",
       });
     }
@@ -231,7 +207,6 @@ export const Feastify = () => {
       {/* Search and Filters */}
       <SearchFilters 
         onSearch={handleSearch}
-        onSearchByName={handleSearchByName}
         onCuisineFilter={setSelectedCuisine}
         onDietFilter={setSelectedDiet}
         selectedCuisine={selectedCuisine}

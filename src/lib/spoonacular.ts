@@ -1,69 +1,67 @@
+import { hardcodedRecipes } from "@/data/recipes";
+
 const SPOONACULAR_API_KEY = "1837ae4d0d5c47dd8a92f66c69ebefee";
 const EDAMAM_APP_ID = "7849275a";
 const EDAMAM_API_KEY = "43c9b259e181fe6f1d005dbdfdc684be";
 const BASE_URL = 'https://api.spoonacular.com/recipes';
 
-export const searchRecipesByIngredients = async (ingredients: string) => {
-  const response = await fetch(
-    `${BASE_URL}/findByIngredients?ingredients=${encodeURIComponent(ingredients)}&number=12&apiKey=${SPOONACULAR_API_KEY}&fillIngredients=true&addRecipeInformation=true&addRecipeNutrition=true`
-  );
-  
-  if (!response.ok) {
-    throw new Error('Failed to fetch recipes');
+export const searchRecipes = async (query: string) => {
+  // First try API, fallback to hardcoded data if API fails
+  try {
+    // Try searching by ingredients first
+    const ingredientResponse = await fetch(
+      `${BASE_URL}/findByIngredients?ingredients=${encodeURIComponent(query)}&number=12&apiKey=${SPOONACULAR_API_KEY}&fillIngredients=true&addRecipeInformation=true&addRecipeNutrition=true`
+    );
+    
+    if (ingredientResponse.ok) {
+      const data = await ingredientResponse.json();
+      if (data.length > 0) return data;
+    }
+
+    // Try searching by recipe name
+    const nameResponse = await fetch(
+      `${BASE_URL}/complexSearch?query=${encodeURIComponent(query)}&number=12&apiKey=${SPOONACULAR_API_KEY}&addRecipeInformation=true&fillIngredients=true&addRecipeNutrition=true`
+    );
+    
+    if (nameResponse.ok) {
+      const data = await nameResponse.json();
+      if (data.results && data.results.length > 0) return data.results;
+    }
+  } catch (error) {
+    console.warn('API search failed, using local data:', error);
   }
-  
-  return response.json();
+
+  // Fallback to hardcoded recipes - search by name or ingredients
+  const searchTerms = query.toLowerCase().split(' ');
+  return hardcodedRecipes.filter(recipe => {
+    const titleMatch = searchTerms.some(term => 
+      recipe.title.toLowerCase().includes(term)
+    );
+    const ingredientMatch = searchTerms.some(term =>
+      recipe.ingredients.some(ingredient => 
+        ingredient.toLowerCase().includes(term)
+      )
+    );
+    const cuisineMatch = searchTerms.some(term =>
+      recipe.cuisines.some(cuisine => 
+        cuisine.toLowerCase().includes(term)
+      )
+    );
+    return titleMatch || ingredientMatch || cuisineMatch;
+  });
+};
+
+export const searchRecipesByIngredients = async (ingredients: string) => {
+  return searchRecipes(ingredients);
 };
 
 export const searchRecipesByName = async (dishName: string) => {
-  const response = await fetch(
-    `${BASE_URL}/complexSearch?query=${encodeURIComponent(dishName)}&number=50&apiKey=${SPOONACULAR_API_KEY}&addRecipeInformation=true&fillIngredients=true&addRecipeNutrition=true`
-  );
-  
-  if (!response.ok) {
-    throw new Error('Failed to search recipes by name');
-  }
-  
-  const data = await response.json();
-  return data.results;
+  return searchRecipes(dishName);
 };
 
 export const getRandomRecipes = async (number: number = 12) => {
-  // Get ALL available recipes from different cuisines
-  const cuisines = [
-    'indian', 'italian', 'chinese', 'mexican', 'american', 'thai', 'french', 'japanese',
-    'korean', 'mediterranean', 'middle eastern', 'spanish', 'greek', 'vietnamese', 
-    'british', 'german', 'turkish', 'lebanese', 'moroccan', 'brazilian'
-  ];
-  const maxRecipesPerCuisine = 100; // Maximum allowed by Spoonacular API
-  
-  const allRecipes = [];
-  
-  for (const cuisine of cuisines) {
-    try {
-      const response = await fetch(
-        `${BASE_URL}/complexSearch?cuisine=${cuisine}&number=${maxRecipesPerCuisine}&apiKey=${SPOONACULAR_API_KEY}&addRecipeInformation=true&fillIngredients=true&addRecipeNutrition=true`
-      );
-      
-      if (response.ok) {
-        const data = await response.json();
-        console.log(`Fetched ${data.results.length} ${cuisine} recipes`);
-        // Add cuisine info to each recipe if not present
-        const recipesWithCuisine = data.results.map(recipe => ({
-          ...recipe,
-          cuisines: recipe.cuisines || [cuisine]
-        }));
-        allRecipes.push(...recipesWithCuisine);
-      } else {
-        console.error(`Failed to fetch ${cuisine} recipes:`, response.status, response.statusText);
-      }
-    } catch (error) {
-      console.error(`Error fetching ${cuisine} recipes:`, error);
-    }
-  }
-  
-  console.log(`Total recipes fetched: ${allRecipes.length}`);
-  return allRecipes; // Return ALL fetched recipes
+  // Return hardcoded recipes since API is hitting limits
+  return hardcodedRecipes;
 };
 
 export const getRecipeInformation = async (id: number) => {
