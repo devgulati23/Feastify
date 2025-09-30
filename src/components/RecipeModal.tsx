@@ -43,7 +43,7 @@ interface RecipeModalProps {
 export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBookmark }: RecipeModalProps) => {
   if (!isOpen || !recipe) return null;
 
-  const instructions = recipe.analyzedInstructions[0]?.steps || [];
+  const instructions = recipe.analyzedInstructions?.[0]?.steps || [];
   const calories = recipe.nutrition?.nutrients?.find(n => n.name === "Calories");
   const protein = recipe.nutrition?.nutrients?.find(n => n.name === "Protein");
   const carbs = recipe.nutrition?.nutrients?.find(n => n.name === "Carbohydrates");
@@ -168,11 +168,15 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
-                    {recipe.extendedIngredients.map((ingredient) => (
+                    {recipe.extendedIngredients?.map((ingredient) => (
                       <li key={ingredient.id} className="text-sm text-white">
                         • {ingredient.original}
                       </li>
-                    ))}
+                    )) || (
+                      <p className="text-sm text-white">
+                        Ingredients not available for this recipe.
+                      </p>
+                    )}
                   </ul>
                 </CardContent>
               </Card>

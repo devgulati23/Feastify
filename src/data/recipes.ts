@@ -8,8 +8,31 @@ export const hardcodedRecipes = [
     readyInMinutes: 45,
     servings: 4,
     cuisines: ["indian"],
-    nutrition: { calories: 420, protein: "25g" },
-    ingredients: ["chicken", "tomato", "cream", "onion", "garlic", "ginger", "spices"]
+    nutrition: { 
+      nutrients: [
+        { name: "Calories", amount: 420, unit: "kcal" },
+        { name: "Protein", amount: 25, unit: "g" }
+      ]
+    },
+    ingredients: ["chicken", "tomato", "cream", "onion", "garlic", "ginger", "spices"],
+    extendedIngredients: [
+      { id: 1, original: "500g chicken breast, cubed" },
+      { id: 2, original: "2 large tomatoes, chopped" },
+      { id: 3, original: "200ml heavy cream" },
+      { id: 4, original: "1 large onion, diced" },
+      { id: 5, original: "3 cloves garlic, minced" },
+      { id: 6, original: "1 inch ginger, grated" },
+      { id: 7, original: "2 tsp garam masala" }
+    ],
+    analyzedInstructions: [{
+      steps: [
+        { number: 1, step: "Heat oil in a pan and cook chicken until golden brown." },
+        { number: 2, step: "Add onions, garlic, and ginger. Cook until fragrant." },
+        { number: 3, step: "Add tomatoes and spices. Cook until sauce thickens." },
+        { number: 4, step: "Stir in cream and simmer for 5 minutes. Serve hot." }
+      ]
+    }],
+    summary: "A creamy and flavorful Indian curry with tender chicken in a rich tomato-based sauce."
   },
   {
     id: 2,
@@ -19,8 +42,30 @@ export const hardcodedRecipes = [
     readyInMinutes: 60,
     servings: 6,
     cuisines: ["indian"],
-    nutrition: { calories: 350, protein: "12g" },
-    ingredients: ["rice", "vegetables", "onion", "spices", "yogurt", "saffron"]
+    nutrition: { 
+      nutrients: [
+        { name: "Calories", amount: 350, unit: "kcal" },
+        { name: "Protein", amount: 12, unit: "g" }
+      ]
+    },
+    ingredients: ["rice", "vegetables", "onion", "spices", "yogurt", "saffron"],
+    extendedIngredients: [
+      { id: 1, original: "2 cups basmati rice" },
+      { id: 2, original: "Mixed vegetables (carrots, peas, beans)" },
+      { id: 3, original: "2 large onions, sliced" },
+      { id: 4, original: "Biryani spices" },
+      { id: 5, original: "1 cup yogurt" },
+      { id: 6, original: "Pinch of saffron" }
+    ],
+    analyzedInstructions: [{
+      steps: [
+        { number: 1, step: "Soak rice for 30 minutes, then boil until 70% cooked." },
+        { number: 2, step: "Sauté vegetables with spices until tender." },
+        { number: 3, step: "Layer rice and vegetables alternately." },
+        { number: 4, step: "Cover and cook on low heat for 45 minutes." }
+      ]
+    }],
+    summary: "A fragrant Indian rice dish layered with spiced vegetables and aromatic basmati rice."
   },
   {
     id: 3,
@@ -30,8 +75,30 @@ export const hardcodedRecipes = [
     readyInMinutes: 40,
     servings: 4,
     cuisines: ["indian"],
-    nutrition: { calories: 380, protein: "18g" },
-    ingredients: ["paneer", "tomato", "cream", "onion", "spices", "bell pepper"]
+    nutrition: { 
+      nutrients: [
+        { name: "Calories", amount: 380, unit: "kcal" },
+        { name: "Protein", amount: 18, unit: "g" }
+      ]
+    },
+    ingredients: ["paneer", "tomato", "cream", "onion", "spices", "bell pepper"],
+    extendedIngredients: [
+      { id: 1, original: "400g paneer, cubed" },
+      { id: 2, original: "3 large tomatoes" },
+      { id: 3, original: "150ml heavy cream" },
+      { id: 4, original: "2 onions, diced" },
+      { id: 5, original: "Indian spices" },
+      { id: 6, original: "1 bell pepper, cubed" }
+    ],
+    analyzedInstructions: [{
+      steps: [
+        { number: 1, step: "Marinate paneer cubes in yogurt and spices for 30 minutes." },
+        { number: 2, step: "Grill paneer until charred on all sides." },
+        { number: 3, step: "Prepare masala sauce with tomatoes, onions, and spices." },
+        { number: 4, step: "Add grilled paneer to sauce and simmer with cream." }
+      ]
+    }],
+    summary: "Grilled paneer cubes in a rich, creamy tomato-based curry sauce."
   },
 
   // Italian Cuisine
@@ -43,8 +110,30 @@ export const hardcodedRecipes = [
     readyInMinutes: 25,
     servings: 4,
     cuisines: ["italian"],
-    nutrition: { calories: 520, protein: "22g" },
-    ingredients: ["spaghetti", "bacon", "eggs", "cheese", "garlic", "black pepper"]
+    nutrition: { 
+      nutrients: [
+        { name: "Calories", amount: 520, unit: "kcal" },
+        { name: "Protein", amount: 22, unit: "g" }
+      ]
+    },
+    ingredients: ["spaghetti", "bacon", "eggs", "cheese", "garlic", "black pepper"],
+    extendedIngredients: [
+      { id: 1, original: "400g spaghetti pasta" },
+      { id: 2, original: "200g bacon, diced" },
+      { id: 3, original: "4 large eggs" },
+      { id: 4, original: "100g Parmesan cheese, grated" },
+      { id: 5, original: "3 cloves garlic, minced" },
+      { id: 6, original: "Fresh black pepper to taste" }
+    ],
+    analyzedInstructions: [{
+      steps: [
+        { number: 1, step: "Cook spaghetti in salted boiling water until al dente." },
+        { number: 2, step: "Fry bacon until crispy, add garlic for last minute." },
+        { number: 3, step: "Whisk eggs with cheese and black pepper." },
+        { number: 4, step: "Toss hot pasta with bacon, then quickly mix in egg mixture off heat." }
+      ]
+    }],
+    summary: "Classic Italian pasta dish with a creamy egg and cheese sauce, crispy bacon, and black pepper."
   },
   {
     id: 5,
@@ -54,8 +143,29 @@ export const hardcodedRecipes = [
     readyInMinutes: 30,
     servings: 4,
     cuisines: ["italian"],
-    nutrition: { calories: 320, protein: "14g" },
-    ingredients: ["flour", "tomato", "mozzarella", "basil", "olive oil"]
+    nutrition: { 
+      nutrients: [
+        { name: "Calories", amount: 320, unit: "kcal" },
+        { name: "Protein", amount: 14, unit: "g" }
+      ]
+    },
+    ingredients: ["flour", "tomato", "mozzarella", "basil", "olive oil"],
+    extendedIngredients: [
+      { id: 1, original: "300g pizza flour" },
+      { id: 2, original: "200g crushed tomatoes" },
+      { id: 3, original: "250g fresh mozzarella" },
+      { id: 4, original: "Fresh basil leaves" },
+      { id: 5, original: "Extra virgin olive oil" }
+    ],
+    analyzedInstructions: [{
+      steps: [
+        { number: 1, step: "Make pizza dough and let it rise for 1 hour." },
+        { number: 2, step: "Roll out dough and spread tomato sauce." },
+        { number: 3, step: "Add mozzarella and fresh basil leaves." },
+        { number: 4, step: "Bake at 250°C for 10-12 minutes until golden." }
+      ]
+    }],
+    summary: "Classic Italian pizza with tomato sauce, fresh mozzarella, and basil."
   },
   {
     id: 6,
@@ -350,6 +460,34 @@ export const hardcodedRecipes = [
     servings: 2,
     cuisines: ["brazilian"],
     nutrition: { calories: 280, protein: "8g" },
-    ingredients: ["acai", "banana", "granola", "berries", "honey"]
+    ingredients: ["acai", "banana", "granola", "berries", "honey"],
+    extendedIngredients: [
+      { id: 1, original: "100g frozen acai" },
+      { id: 2, original: "1 banana, sliced" },
+      { id: 3, original: "50g granola" },
+      { id: 4, original: "Mixed berries" },
+      { id: 5, original: "2 tbsp honey" }
+    ],
+    analyzedInstructions: [{
+      steps: [
+        { number: 1, step: "Blend frozen acai with a little water until smooth." },
+        { number: 2, step: "Pour into a bowl and top with banana slices." },
+        { number: 3, step: "Add granola, berries, and drizzle with honey." },
+        { number: 4, step: "Serve immediately while cold." }
+      ]
+    }],
+    summary: "A healthy Brazilian superfood bowl with acai, fruits, and granola."
   }
-];
+].map(recipe => ({
+  ...recipe,
+  // Ensure all recipes have required properties
+  extendedIngredients: recipe.extendedIngredients || recipe.ingredients?.map((ing, index) => ({
+    id: index + 1,
+    original: ing
+  })) || [],
+  analyzedInstructions: recipe.analyzedInstructions || [{
+    steps: [{ number: 1, step: "Recipe instructions not available." }]
+  }],
+  summary: recipe.summary || "No description available.",
+  nutrition: recipe.nutrition || { nutrients: [] }
+}));
