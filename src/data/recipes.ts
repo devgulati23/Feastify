@@ -37,7 +37,7 @@ export const hardcodedRecipes = [
   {
     id: 2,
     title: "Vegetable Biryani",
-    image: "/src/assets/fried-rice.jpg",
+    image: "/src/assets/vegetable-biryani.jpg",
     vegetarian: true,
     readyInMinutes: 60,
     servings: 6,
@@ -70,7 +70,7 @@ export const hardcodedRecipes = [
   {
     id: 3,
     title: "Paneer Tikka Masala",
-    image: "/src/assets/butter-chicken.jpg",
+    image: "/src/assets/paneer-tikka-masala.jpg",
     vegetarian: true,
     readyInMinutes: 40,
     servings: 4,
@@ -138,7 +138,7 @@ export const hardcodedRecipes = [
   {
     id: 5,
     title: "Margherita Pizza",
-    image: "/src/assets/hero-food.jpg",
+    image: "/src/assets/margherita-pizza.jpg",
     vegetarian: true,
     readyInMinutes: 30,
     servings: 4,
@@ -170,7 +170,7 @@ export const hardcodedRecipes = [
   {
     id: 6,
     title: "Chicken Parmigiana",
-    image: "/src/assets/hero-food.jpg",
+    image: "/src/assets/chicken-parmigiana.jpg",
     vegetarian: false,
     readyInMinutes: 50,
     servings: 4,
@@ -194,7 +194,7 @@ export const hardcodedRecipes = [
   {
     id: 8,
     title: "Vegetable Spring Rolls",
-    image: "/src/assets/fried-rice.jpg",
+    image: "/src/assets/spring-rolls.jpg",
     vegetarian: true,
     readyInMinutes: 30,
     servings: 6,
@@ -205,7 +205,7 @@ export const hardcodedRecipes = [
   {
     id: 9,
     title: "Sweet and Sour Pork",
-    image: "/src/assets/hero-food.jpg",
+    image: "/src/assets/sweet-sour-pork.jpg",
     vegetarian: false,
     readyInMinutes: 35,
     servings: 4,
@@ -218,7 +218,7 @@ export const hardcodedRecipes = [
   {
     id: 10,
     title: "Chicken Tacos",
-    image: "/src/assets/hero-food.jpg",
+    image: "/src/assets/chicken-tacos.jpg",
     vegetarian: false,
     readyInMinutes: 25,
     servings: 4,
@@ -229,7 +229,7 @@ export const hardcodedRecipes = [
   {
     id: 11,
     title: "Vegetarian Quesadilla",
-    image: "/src/assets/hero-food.jpg",
+    image: "/src/assets/quesadilla.jpg",
     vegetarian: true,
     readyInMinutes: 15,
     servings: 2,
@@ -240,7 +240,7 @@ export const hardcodedRecipes = [
   {
     id: 12,
     title: "Beef Enchiladas",
-    image: "/src/assets/hero-food.jpg",
+    image: "/src/assets/beef-enchiladas.jpg",
     vegetarian: false,
     readyInMinutes: 45,
     servings: 6,
@@ -253,7 +253,7 @@ export const hardcodedRecipes = [
   {
     id: 13,
     title: "Classic Burger",
-    image: "/src/assets/hero-food.jpg",
+    image: "/src/assets/classic-burger.jpg",
     vegetarian: false,
     readyInMinutes: 20,
     servings: 4,
@@ -264,7 +264,7 @@ export const hardcodedRecipes = [
   {
     id: 14,
     title: "BBQ Ribs",
-    image: "/src/assets/hero-food.jpg",
+    image: "/src/assets/bbq-ribs.jpg",
     vegetarian: false,
     readyInMinutes: 180,
     servings: 4,
@@ -275,7 +275,7 @@ export const hardcodedRecipes = [
   {
     id: 15,
     title: "Caesar Salad",
-    image: "/src/assets/hero-food.jpg",
+    image: "/src/assets/caesar-salad.jpg",
     vegetarian: true,
     readyInMinutes: 15,
     servings: 4,
@@ -288,7 +288,7 @@ export const hardcodedRecipes = [
   {
     id: 16,
     title: "Pad Thai",
-    image: "/src/assets/fried-rice.jpg",
+    image: "/src/assets/pad-thai.jpg",
     vegetarian: false,
     readyInMinutes: 25,
     servings: 4,
@@ -299,7 +299,7 @@ export const hardcodedRecipes = [
   {
     id: 17,
     title: "Green Curry",
-    image: "/src/assets/butter-chicken.jpg",
+    image: "/src/assets/green-curry.jpg",
     vegetarian: true,
     readyInMinutes: 30,
     servings: 4,
@@ -310,7 +310,7 @@ export const hardcodedRecipes = [
   {
     id: 18,
     title: "Tom Yum Soup",
-    image: "/src/assets/butter-chicken.jpg",
+    image: "/src/assets/tom-yum-soup.jpg",
     vegetarian: false,
     readyInMinutes: 20,
     servings: 4,
@@ -323,7 +323,7 @@ export const hardcodedRecipes = [
   {
     id: 19,
     title: "Coq au Vin",
-    image: "/src/assets/hero-food.jpg",
+    image: "/src/assets/coq-au-vin.jpg",
     vegetarian: false,
     readyInMinutes: 90,
     servings: 4,
@@ -334,7 +334,7 @@ export const hardcodedRecipes = [
   {
     id: 20,
     title: "Ratatouille",
-    image: "/src/assets/hero-food.jpg",
+    image: "/src/assets/ratatouille.jpg",
     vegetarian: true,
     readyInMinutes: 45,
     servings: 6,
@@ -347,7 +347,7 @@ export const hardcodedRecipes = [
   {
     id: 21,
     title: "Chicken Teriyaki",
-    image: "/src/assets/hero-food.jpg",
+    image: "/src/assets/chicken-teriyaki.jpg",
     vegetarian: false,
     readyInMinutes: 25,
     servings: 4,
@@ -358,7 +358,7 @@ export const hardcodedRecipes = [
   {
     id: 22,
     title: "Vegetable Sushi",
-    image: "/src/assets/fried-rice.jpg",
+    image: "/src/assets/vegetable-sushi.jpg",
     vegetarian: true,
     readyInMinutes: 45,
     servings: 4,
@@ -371,7 +371,7 @@ export const hardcodedRecipes = [
   {
     id: 23,
     title: "Bibimbap",
-    image: "/src/assets/fried-rice.jpg",
+    image: "/src/assets/bibimbap.jpg",
     vegetarian: true,
     readyInMinutes: 40,
     servings: 4,
@@ -382,7 +382,7 @@ export const hardcodedRecipes = [
   {
     id: 24,
     title: "Korean BBQ Beef",
-    image: "/src/assets/hero-food.jpg",
+    image: "/src/assets/korean-bbq-beef.jpg",
     vegetarian: false,
     readyInMinutes: 30,
     servings: 4,
@@ -395,7 +395,7 @@ export const hardcodedRecipes = [
   {
     id: 25,
     title: "Greek Salad",
-    image: "/src/assets/hero-food.jpg",
+    image: "/src/assets/greek-salad.jpg",
     vegetarian: true,
     readyInMinutes: 15,
     servings: 4,
@@ -406,7 +406,7 @@ export const hardcodedRecipes = [
   {
     id: 26,
     title: "Hummus with Pita",
-    image: "/src/assets/hero-food.jpg",
+    image: "/src/assets/hummus-pita.jpg",
     vegetarian: true,
     readyInMinutes: 10,
     servings: 6,
@@ -419,7 +419,7 @@ export const hardcodedRecipes = [
   {
     id: 27,
     title: "Paella",
-    image: "/src/assets/fried-rice.jpg",
+    image: "/src/assets/paella.jpg",
     vegetarian: false,
     readyInMinutes: 60,
     servings: 6,
@@ -430,7 +430,7 @@ export const hardcodedRecipes = [
   {
     id: 28,
     title: "Patatas Bravas",
-    image: "/src/assets/hero-food.jpg",
+    image: "/src/assets/patatas-bravas.jpg",
     vegetarian: true,
     readyInMinutes: 30,
     servings: 4,
@@ -443,7 +443,7 @@ export const hardcodedRecipes = [
   {
     id: 29,
     title: "Feijoada",
-    image: "/src/assets/hero-food.jpg",
+    image: "/src/assets/feijoada.jpg",
     vegetarian: false,
     readyInMinutes: 120,
     servings: 6,
@@ -454,7 +454,7 @@ export const hardcodedRecipes = [
   {
     id: 30,
     title: "Acai Bowl",
-    image: "/src/assets/hero-food.jpg",
+    image: "/src/assets/acai-bowl.jpg",
     vegetarian: true,
     readyInMinutes: 10,
     servings: 2,
