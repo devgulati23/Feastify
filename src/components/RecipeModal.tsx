@@ -70,7 +70,7 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
             </div>
             
             {/* Overlay with controls */}
-            <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-background/20" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
             
             <div className="absolute top-4 right-4 flex gap-2">
               <button
