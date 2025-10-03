@@ -164,16 +164,16 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
               {/* Ingredients */}
               <Card>
                 <CardHeader>
-                  <h3 className="text-lg font-semibold text-white">Ingredients</h3>
+                  <h3 className="text-lg font-semibold text-card-foreground">Ingredients</h3>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2">
                     {recipe.extendedIngredients?.map((ingredient) => (
-                      <li key={ingredient.id} className="text-sm text-white">
+                      <li key={ingredient.id} className="text-sm text-card-foreground">
                         • {ingredient.original}
                       </li>
                     )) || (
-                      <p className="text-sm text-white">
+                      <p className="text-sm text-muted-foreground">
                         Ingredients not available for this recipe.
                       </p>
                     )}
@@ -184,7 +184,7 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
               {/* Recipe */}
               <Card>
                 <CardHeader>
-                  <h3 className="text-lg font-semibold text-white">Recipe</h3>
+                  <h3 className="text-lg font-semibold text-card-foreground">Recipe</h3>
                 </CardHeader>
                 <CardContent>
                   {instructions.length > 0 ? (
@@ -194,14 +194,14 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
                           <span className="flex-shrink-0 w-6 h-6 bg-primary text-primary-foreground rounded-full text-xs font-medium flex items-center justify-center">
                             {step.number}
                           </span>
-                          <p className="text-sm text-white leading-relaxed">
+                          <p className="text-sm text-card-foreground leading-relaxed">
                             {step.step}
                           </p>
                         </li>
                       ))}
                     </ol>
                   ) : (
-                    <p className="text-sm text-white">
+                    <p className="text-sm text-muted-foreground">
                       Recipe not available for this dish.
                     </p>
                   )}
@@ -213,26 +213,26 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
             {(calories || protein || carbs) && (
               <Card className="mt-6">
                 <CardHeader>
-                  <h3 className="text-lg font-semibold text-white">Nutrition (per serving)</h3>
+                  <h3 className="text-lg font-semibold text-card-foreground">Nutrition (per serving)</h3>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-3 gap-4 text-center">
                     {calories && (
                       <div>
                         <p className="text-lg font-semibold text-primary">{Math.round(calories.amount)}</p>
-                        <p className="text-xs text-white">Calories</p>
+                        <p className="text-xs text-muted-foreground">Calories</p>
                       </div>
                     )}
                     {protein && (
                       <div>
                         <p className="text-lg font-semibold text-primary">{Math.round(protein.amount)}g</p>
-                        <p className="text-xs text-white">Protein</p>
+                        <p className="text-xs text-muted-foreground">Protein</p>
                       </div>
                     )}
                     {carbs && (
                       <div>
                         <p className="text-lg font-semibold text-primary">{Math.round(carbs.amount)}g</p>
-                        <p className="text-xs text-white">Carbs</p>
+                        <p className="text-xs text-muted-foreground">Carbs</p>
                       </div>
                     )}
                   </div>
