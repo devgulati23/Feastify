@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { X, Clock, Users, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -41,6 +42,22 @@ interface RecipeModalProps {
 }
 
 export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBookmark }: RecipeModalProps) => {
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen || !recipe) return null;
 
   const instructions = recipe.analyzedInstructions?.[0]?.steps || [];
