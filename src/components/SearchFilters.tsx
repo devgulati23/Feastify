@@ -13,9 +13,7 @@ interface SearchFiltersProps {
 }
 
 const cuisines = [
-  'All', 'Indian', 'Italian', 'Chinese', 'Mexican', 'American', 'Thai', 'French', 'Japanese',
-  'Korean', 'Mediterranean', 'Middle Eastern', 'Spanish', 'Greek', 'Vietnamese',
-  'British', 'German', 'Turkish', 'Lebanese', 'Moroccan', 'Brazilian'
+  'All', 'Indian', 'Italian', 'Chinese', 'Mexican', 'American', 'Thai'
 ];
 
 export const SearchFilters = ({ 
