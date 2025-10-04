@@ -1,5 +1,4 @@
 import { hardcodedRecipes } from "@/data/recipes";
-import { supabase } from "@/integrations/supabase/client";
 
 const SPOONACULAR_API_KEY = "1837ae4d0d5c47dd8a92f66c69ebefee";
 const EDAMAM_APP_ID = "7849275a";
@@ -34,7 +33,7 @@ export const searchRecipes = async (query: string) => {
 
   // Fallback to hardcoded recipes - search by name or ingredients
   const searchTerms = query.toLowerCase().split(' ');
-  const hardcodedResults = hardcodedRecipes.filter(recipe => {
+  return hardcodedRecipes.filter(recipe => {
     const titleMatch = searchTerms.some(term => 
       recipe.title.toLowerCase().includes(term)
     );
@@ -50,25 +49,6 @@ export const searchRecipes = async (query: string) => {
     );
     return titleMatch || ingredientMatch || cuisineMatch;
   });
-
-  // If no hardcoded results, generate using AI
-  if (hardcodedResults.length === 0) {
-    try {
-      console.log('Generating recipe with AI for:', query);
-      const { data, error } = await supabase.functions.invoke('generate-recipe', {
-        body: { dishName: query }
-      });
-
-      if (error) throw error;
-      if (data?.recipe) {
-        return [data.recipe];
-      }
-    } catch (error) {
-      console.warn('AI recipe generation failed:', error);
-    }
-  }
-
-  return hardcodedResults;
 };
 
 export const searchRecipesByIngredients = async (ingredients: string) => {
