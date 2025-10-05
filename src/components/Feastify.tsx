@@ -4,9 +4,10 @@ import { Navbar } from "./Navbar";
 import { SearchFilters } from "./SearchFilters";
 import { RecipeCard } from "./RecipeCard";
 import { RecipeModal } from "./RecipeModal";
+import { AuthDialog } from "./AuthDialog";
 import { useToast } from "@/hooks/use-toast";
 import { auth } from "@/lib/firebase";
-import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { searchRecipes, getRandomRecipes } from "@/lib/spoonacular";
 import heroImage from "@/assets/hero-food.jpg";
 import feastifyLogo from "@/assets/feastify-logo.jpeg";
@@ -16,6 +17,7 @@ export const Feastify = () => {
   const [filteredRecipes, setFilteredRecipes] = useState([]);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
   const [bookmarkedRecipes, setBookmarkedRecipes] = useState<number[]>([]);
   const [selectedCuisine, setSelectedCuisine] = useState("All");
   const [selectedDiet, setSelectedDiet] = useState("all");
@@ -126,21 +128,8 @@ export const Feastify = () => {
     setIsModalOpen(true);
   };
 
-  const handleSignIn = async () => {
-    try {
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
-      toast({
-        title: "Signed In",
-        description: "Successfully signed in with Google.",
-      });
-    } catch (error) {
-      toast({
-        title: "Sign In Error",
-        description: "Failed to sign in. Please try again.",
-        variant: "destructive",
-      });
-    }
+  const handleSignIn = () => {
+    setIsAuthDialogOpen(true);
   };
 
   const handleSignOut = async () => {
@@ -269,6 +258,12 @@ export const Feastify = () => {
         onClose={() => setIsModalOpen(false)}
         isBookmarked={selectedRecipe ? bookmarkedRecipes.includes(selectedRecipe.id) : false}
         onToggleBookmark={handleToggleBookmark}
+      />
+
+      {/* Auth Dialog */}
+      <AuthDialog 
+        isOpen={isAuthDialogOpen}
+        onClose={() => setIsAuthDialogOpen(false)}
       />
     </div>
   );
