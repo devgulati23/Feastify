@@ -5,9 +5,9 @@ import { SearchFilters } from "./SearchFilters";
 import { RecipeCard } from "./RecipeCard";
 import { RecipeModal } from "./RecipeModal";
 import { AuthDialog } from "./AuthDialog";
+import { SettingsDialog } from "./SettingsDialog";
 import { useToast } from "@/hooks/use-toast";
-import { auth } from "@/lib/firebase";
-import { signOut } from "firebase/auth";
+import { supabase } from "@/integrations/supabase/client";
 import { searchRecipes, getRandomRecipes } from "@/lib/spoonacular";
 import heroImage from "@/assets/hero-food.jpg";
 import feastifyLogo from "@/assets/feastify-logo.jpeg";
@@ -18,6 +18,7 @@ export const Feastify = () => {
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [bookmarkedRecipes, setBookmarkedRecipes] = useState<number[]>([]);
   const [selectedCuisine, setSelectedCuisine] = useState("All");
   const [selectedDiet, setSelectedDiet] = useState("all");
@@ -26,38 +27,59 @@ export const Feastify = () => {
   const [user, setUser] = useState(null);
   const { toast } = useToast();
 
-  // Load bookmarks from localStorage, auth state, and initial recipes
+  // Load auth state, bookmarks, and initial recipes
   useEffect(() => {
-    const saved = localStorage.getItem("feastify-bookmarks");
-    if (saved) {
-      setBookmarkedRecipes(JSON.parse(saved));
-    }
-
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      setUser(user);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        loadBookmarks();
+      } else {
+        setBookmarkedRecipes([]);
+      }
     });
 
-    // Load initial random recipes
-    const loadInitialRecipes = async () => {
-      setIsLoading(true);
-      try {
-        const initialRecipes = await getRandomRecipes(); // Get all available recipes
-        setRecipes(initialRecipes);
-      } catch (error) {
-        console.error("Failed to load initial recipes:", error);
-        toast({
-          title: "Loading Error",
-          description: "Failed to load initial recipes. Please try again.",
-          variant: "destructive",
-        });
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        loadBookmarks();
       }
-      setIsLoading(false);
-    };
+    });
 
     loadInitialRecipes();
 
-    return () => unsubscribe();
+    return () => subscription.unsubscribe();
   }, []);
+
+  const loadBookmarks = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("bookmarks")
+        .select("recipe_id");
+
+      if (error) throw error;
+
+      setBookmarkedRecipes(data?.map((b) => b.recipe_id) || []);
+    } catch (error) {
+      console.error("Failed to load bookmarks:", error);
+    }
+  };
+
+  const loadInitialRecipes = async () => {
+    setIsLoading(true);
+    try {
+      const initialRecipes = await getRandomRecipes();
+      setRecipes(initialRecipes);
+    } catch (error) {
+      console.error("Failed to load initial recipes:", error);
+      toast({
+        title: "Loading Error",
+        description: "Failed to load initial recipes. Please try again.",
+        variant: "destructive",
+      });
+    }
+    setIsLoading(false);
+  };
 
   // Apply filters
   useEffect(() => {
@@ -106,21 +128,55 @@ export const Feastify = () => {
     setIsLoading(false);
   };
 
-  const handleToggleBookmark = (recipeId: number) => {
-    setBookmarkedRecipes(prev => {
-      const newBookmarks = prev.includes(recipeId)
-        ? prev.filter(id => id !== recipeId)
-        : [...prev, recipeId];
-      
-      localStorage.setItem("feastify-bookmarks", JSON.stringify(newBookmarks));
-      
+  const handleToggleBookmark = async (recipeId: number) => {
+    if (!user) {
       toast({
-        title: prev.includes(recipeId) ? "Removed from bookmarks" : "Added to bookmarks",
-        description: "Your recipe bookmarks have been updated.",
+        title: "Sign In Required",
+        description: "Please sign in to bookmark recipes.",
+        variant: "destructive",
       });
-      
-      return newBookmarks;
-    });
+      setIsAuthDialogOpen(true);
+      return;
+    }
+
+    try {
+      const isBookmarked = bookmarkedRecipes.includes(recipeId);
+
+      if (isBookmarked) {
+        const { error } = await supabase
+          .from("bookmarks")
+          .delete()
+          .eq("recipe_id", recipeId)
+          .eq("user_id", user.id);
+
+        if (error) throw error;
+
+        setBookmarkedRecipes((prev) => prev.filter((id) => id !== recipeId));
+        toast({
+          title: "Removed from bookmarks",
+          description: "Recipe removed from your bookmarks.",
+        });
+      } else {
+        const { error } = await supabase
+          .from("bookmarks")
+          .insert({ recipe_id: recipeId, user_id: user.id });
+
+        if (error) throw error;
+
+        setBookmarkedRecipes((prev) => [...prev, recipeId]);
+        toast({
+          title: "Added to bookmarks",
+          description: "Recipe added to your bookmarks.",
+        });
+      }
+    } catch (error) {
+      console.error("Error toggling bookmark:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update bookmark. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleViewMore = (recipe: any) => {
@@ -134,11 +190,13 @@ export const Feastify = () => {
 
   const handleSignOut = async () => {
     try {
-      await signOut(auth);
+      await supabase.auth.signOut();
+      setBookmarkedRecipes([]);
       toast({
         title: "Signed Out",
         description: "Successfully signed out.",
       });
+      setIsSettingsOpen(false);
     } catch (error) {
       toast({
         title: "Sign Out Error",
@@ -149,10 +207,34 @@ export const Feastify = () => {
   };
 
   const handleViewBookmarks = () => {
-    // Show only bookmarked recipes
-    const bookmarked = recipes.filter(recipe => bookmarkedRecipes.includes(recipe.id));
+    if (!user) {
+      toast({
+        title: "Sign In Required",
+        description: "Please sign in to view bookmarks.",
+        variant: "destructive",
+      });
+      setIsAuthDialogOpen(true);
+      return;
+    }
+
+    const bookmarked = recipes.filter((recipe) =>
+      bookmarkedRecipes.includes(recipe.id)
+    );
     setFilteredRecipes(bookmarked);
     setSearchQuery("Bookmarked Recipes");
+  };
+
+  const handleOpenSettings = () => {
+    if (!user) {
+      toast({
+        title: "Sign In Required",
+        description: "Please sign in to access settings.",
+        variant: "destructive",
+      });
+      setIsAuthDialogOpen(true);
+      return;
+    }
+    setIsSettingsOpen(true);
   };
 
   return (
@@ -163,7 +245,7 @@ export const Feastify = () => {
         onViewBookmarks={handleViewBookmarks}
         user={user}
         onSignIn={handleSignIn}
-        onSignOut={handleSignOut}
+        onOpenSettings={handleOpenSettings}
       />
       
       {/* Hero Section */}
@@ -264,6 +346,13 @@ export const Feastify = () => {
       <AuthDialog 
         isOpen={isAuthDialogOpen}
         onClose={() => setIsAuthDialogOpen(false)}
+      />
+
+      {/* Settings Dialog */}
+      <SettingsDialog
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        onSignOut={handleSignOut}
       />
     </div>
   );

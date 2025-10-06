@@ -14,8 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
-import { auth } from "@/lib/firebase";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 const authSchema = z.object({
@@ -59,7 +58,16 @@ export const AuthDialog = ({ isOpen, onClose }: AuthDialogProps) => {
   const onSignUp = async (data: AuthFormData) => {
     setIsLoading(true);
     try {
-      await createUserWithEmailAndPassword(auth, data.email, data.password);
+      const { error } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/`,
+        },
+      });
+
+      if (error) throw error;
+
       toast({
         title: "Account Created",
         description: "Your account has been created successfully!",
@@ -68,12 +76,8 @@ export const AuthDialog = ({ isOpen, onClose }: AuthDialogProps) => {
     } catch (error: any) {
       let errorMessage = "Failed to create account. Please try again.";
       
-      if (error.code === "auth/email-already-in-use") {
+      if (error.message?.includes("already registered")) {
         errorMessage = "This email is already registered. Please login instead.";
-      } else if (error.code === "auth/weak-password") {
-        errorMessage = "Password is too weak. Please use a stronger password.";
-      } else if (error.code === "auth/invalid-email") {
-        errorMessage = "Invalid email address.";
       }
 
       toast({
@@ -89,7 +93,13 @@ export const AuthDialog = ({ isOpen, onClose }: AuthDialogProps) => {
   const onLogin = async (data: AuthFormData) => {
     setIsLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, data.email, data.password);
+      const { error } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (error) throw error;
+
       toast({
         title: "Welcome Back",
         description: "Successfully signed in!",
@@ -98,13 +108,7 @@ export const AuthDialog = ({ isOpen, onClose }: AuthDialogProps) => {
     } catch (error: any) {
       let errorMessage = "Failed to sign in. Please try again.";
       
-      if (error.code === "auth/user-not-found") {
-        errorMessage = "No account found with this email. Please sign up first.";
-      } else if (error.code === "auth/wrong-password") {
-        errorMessage = "Incorrect password. Please try again.";
-      } else if (error.code === "auth/invalid-email") {
-        errorMessage = "Invalid email address.";
-      } else if (error.code === "auth/invalid-credential") {
+      if (error.message?.includes("Invalid login credentials")) {
         errorMessage = "Invalid email or password. Please try again.";
       }
 

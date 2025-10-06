@@ -1,4 +1,4 @@
-import { BookOpen, User, LogOut } from "lucide-react";
+import { BookOpen, User, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
 import {
@@ -6,6 +6,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 
 interface NavbarProps {
@@ -13,10 +14,10 @@ interface NavbarProps {
   onViewBookmarks: () => void;
   user?: any;
   onSignIn: () => void;
-  onSignOut: () => void;
+  onOpenSettings: () => void;
 }
 
-export const Navbar = ({ bookmarkedCount, onViewBookmarks, user, onSignIn, onSignOut }: NavbarProps) => {
+export const Navbar = ({ bookmarkedCount, onViewBookmarks, user, onSignIn, onOpenSettings }: NavbarProps) => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/20">
       <div className="max-w-7xl mx-auto px-6 py-4">
@@ -42,10 +43,10 @@ export const Navbar = ({ bookmarkedCount, onViewBookmarks, user, onSignIn, onSig
                     <User className="w-4 h-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem onClick={onSignOut}>
-                    <LogOut className="w-4 h-4 mr-2" />
-                    Sign Out
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={onOpenSettings}>
+                    <Settings className="w-4 h-4 mr-2" />
+                    Settings
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
