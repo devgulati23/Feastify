@@ -9,11 +9,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ThemeToggle } from "./ThemeToggle";
-import { LogOut, MessageSquare, Palette } from "lucide-react";
+import { LogOut, Palette, MessageSquare, User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { Separator } from "@/components/ui/separator";
 
 interface SettingsDialogProps {
   isOpen: boolean;
@@ -67,71 +67,80 @@ export const SettingsDialog = ({ isOpen, onClose, onSignOut }: SettingsDialogPro
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold">Settings</DialogTitle>
+          <DialogTitle className="text-2xl font-bold flex items-center gap-2">
+            <User className="h-6 w-6" />
+            Settings
+          </DialogTitle>
           <DialogDescription>
             Manage your preferences and account settings
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs defaultValue="appearance" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="appearance">
-              <Palette className="mr-2 h-4 w-4" />
-              Appearance
-            </TabsTrigger>
-            <TabsTrigger value="feedback">
-              <MessageSquare className="mr-2 h-4 w-4" />
-              Feedback
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="appearance" className="space-y-4 mt-4">
-            <div className="space-y-2">
-              <Label>Theme</Label>
-              <div className="flex items-center justify-between p-4 border rounded-lg">
-                <span className="text-sm text-muted-foreground">
-                  Switch between light and dark mode
-                </span>
-                <ThemeToggle />
-              </div>
+        <div className="space-y-6 py-4">
+          {/* Appearance Section */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Palette className="h-5 w-5 text-primary" />
+              <h3 className="font-semibold text-lg">Appearance</h3>
             </div>
+            <div className="flex items-center justify-between p-4 border rounded-lg bg-muted/50">
+              <div className="space-y-0.5">
+                <Label className="text-base">Theme</Label>
+                <p className="text-sm text-muted-foreground">
+                  Choose your preferred color scheme
+                </p>
+              </div>
+              <ThemeToggle />
+            </div>
+          </div>
 
-            <div className="pt-4 border-t">
+          <Separator />
+
+          {/* Feedback Section */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <MessageSquare className="h-5 w-5 text-primary" />
+              <h3 className="font-semibold text-lg">Send Feedback</h3>
+            </div>
+            <div className="space-y-3">
+              <div className="space-y-2">
+                <Label htmlFor="suggestion">Your Suggestion</Label>
+                <Textarea
+                  id="suggestion"
+                  placeholder="Share your ideas, report issues, or suggest new features..."
+                  value={suggestion}
+                  onChange={(e) => setSuggestion(e.target.value)}
+                  className="min-h-[120px] resize-none"
+                  disabled={isSubmitting}
+                />
+              </div>
               <Button
-                variant="destructive"
+                onClick={handleSubmitSuggestion}
+                disabled={isSubmitting || !suggestion.trim()}
                 className="w-full"
-                onClick={onSignOut}
               >
-                <LogOut className="mr-2 h-4 w-4" />
-                Sign Out
+                {isSubmitting ? "Submitting..." : "Submit Feedback"}
               </Button>
             </div>
-          </TabsContent>
+          </div>
 
-          <TabsContent value="feedback" className="space-y-4 mt-4">
-            <div className="space-y-2">
-              <Label htmlFor="suggestion">Share Your Suggestion</Label>
-              <Textarea
-                id="suggestion"
-                placeholder="Tell us what you think or suggest new features..."
-                value={suggestion}
-                onChange={(e) => setSuggestion(e.target.value)}
-                className="min-h-[120px]"
-                disabled={isSubmitting}
-              />
-            </div>
+          <Separator />
 
+          {/* Account Section */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-lg">Account</h3>
             <Button
-              onClick={handleSubmitSuggestion}
-              disabled={isSubmitting || !suggestion.trim()}
+              variant="destructive"
               className="w-full"
+              onClick={onSignOut}
             >
-              {isSubmitting ? "Submitting..." : "Submit Suggestion"}
+              <LogOut className="mr-2 h-4 w-4" />
+              Sign Out
             </Button>
-          </TabsContent>
-        </Tabs>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );

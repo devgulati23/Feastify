@@ -225,15 +225,6 @@ export const Feastify = () => {
   };
 
   const handleOpenSettings = () => {
-    if (!user) {
-      toast({
-        title: "Sign In Required",
-        description: "Please sign in to access settings.",
-        variant: "destructive",
-      });
-      setIsAuthDialogOpen(true);
-      return;
-    }
     setIsSettingsOpen(true);
   };
 

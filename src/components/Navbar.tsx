@@ -1,6 +1,5 @@
 import { BookOpen, User, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "./ThemeToggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,28 +35,16 @@ export const Navbar = ({ bookmarkedCount, onViewBookmarks, user, onSignIn, onOpe
               Bookmarks ({bookmarkedCount})
             </Button>
             
-            {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="glass-light">
-                    <User className="w-4 h-4" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={onOpenSettings}>
-                    <Settings className="w-4 h-4 mr-2" />
-                    Settings
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
+            {!user && (
               <Button onClick={onSignIn} variant="ghost" className="glass-light">
                 <User className="w-4 h-4 mr-2" />
                 Sign In
               </Button>
             )}
             
-            <ThemeToggle />
+            <Button variant="ghost" size="icon" className="glass-light" onClick={onOpenSettings}>
+              <Settings className="w-4 h-4" />
+            </Button>
           </div>
         </div>
       </div>
