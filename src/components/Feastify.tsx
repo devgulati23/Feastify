@@ -8,7 +8,7 @@ import { AuthDialog } from "./AuthDialog";
 import { SettingsDialog } from "./SettingsDialog";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { searchRecipes, getRandomRecipes } from "@/lib/spoonacular";
+import { searchRecipes, getRandomRecipes, getRecipeInformation } from "@/lib/spoonacular";
 import heroImage from "@/assets/hero-food.jpg";
 import feastifyLogo from "@/assets/feastify-logo.jpeg";
 
@@ -47,6 +47,7 @@ export const Feastify = () => {
     });
 
     loadInitialRecipes();
+    checkUrlForRecipe();
 
     return () => subscription.unsubscribe();
   }, []);
@@ -79,6 +80,28 @@ export const Feastify = () => {
       });
     }
     setIsLoading(false);
+  };
+
+  const checkUrlForRecipe = async () => {
+    const params = new URLSearchParams(window.location.search);
+    const recipeId = params.get('recipe');
+    
+    if (recipeId) {
+      try {
+        const recipeDetails = await getRecipeInformation(parseInt(recipeId));
+        setSelectedRecipe(recipeDetails);
+        setIsModalOpen(true);
+        // Clean URL without reloading
+        window.history.replaceState({}, '', window.location.pathname);
+      } catch (error) {
+        console.error("Failed to load shared recipe:", error);
+        toast({
+          title: "Error",
+          description: "Failed to load the shared recipe.",
+          variant: "destructive",
+        });
+      }
+    }
   };
 
   // Apply filters
