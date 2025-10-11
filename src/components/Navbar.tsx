@@ -17,12 +17,21 @@ interface NavbarProps {
 }
 
 export const Navbar = ({ bookmarkedCount, onViewBookmarks, user, onSignIn, onOpenSettings }: NavbarProps) => {
+  const handleLogoClick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-border/20">
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-primary">Feastify</h1>
+            <h1 
+              onClick={handleLogoClick}
+              className="text-2xl font-bold text-primary cursor-pointer hover:opacity-80 transition-opacity"
+            >
+              Feastify
+            </h1>
           </div>
           
           <div className="flex items-center gap-4">

@@ -1,9 +1,11 @@
 import { useEffect } from "react";
-import { X, Clock, Users, Heart } from "lucide-react";
+import { X, Clock, Users, Heart, Share2, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { FoodTypeIndicator } from "./FoodTypeIndicator";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import { useState } from "react";
 
 interface RecipeDetails {
   id: number;
@@ -42,6 +44,8 @@ interface RecipeModalProps {
 }
 
 export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBookmark }: RecipeModalProps) => {
+  const [copied, setCopied] = useState(false);
+
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -64,6 +68,33 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
   const calories = recipe.nutrition?.nutrients?.find(n => n.name === "Calories");
   const protein = recipe.nutrition?.nutrients?.find(n => n.name === "Protein");
   const carbs = recipe.nutrition?.nutrients?.find(n => n.name === "Carbohydrates");
+
+  const recipeUrl = `${window.location.origin}/?recipe=${recipe.id}`;
+  
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(recipeUrl);
+      setCopied(true);
+      toast.success("Link copied to clipboard!");
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      toast.error("Failed to copy link");
+    }
+  };
+
+  const handleShare = (platform: string) => {
+    const text = `Check out this recipe: ${recipe.title}`;
+    const url = encodeURIComponent(recipeUrl);
+    const encodedText = encodeURIComponent(text);
+
+    const shareUrls = {
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+      twitter: `https://twitter.com/intent/tweet?text=${encodedText}&url=${url}`,
+      whatsapp: `https://wa.me/?text=${encodedText}%20${url}`,
+    };
+
+    window.open(shareUrls[platform as keyof typeof shareUrls], '_blank', 'noopener,noreferrer');
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -101,6 +132,43 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
                   )}
                 />
               </button>
+              <div className="relative group">
+                <button
+                  className="p-2 rounded-full glass-light hover:bg-background/95 transition-all duration-200"
+                >
+                  <Share2 className="w-5 h-5 text-foreground" />
+                </button>
+                {/* Share dropdown */}
+                <div className="absolute right-0 mt-2 w-48 glass rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
+                  <div className="p-2 space-y-1">
+                    <button
+                      onClick={() => handleShare('facebook')}
+                      className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-primary/10 rounded-md transition-colors"
+                    >
+                      Share on Facebook
+                    </button>
+                    <button
+                      onClick={() => handleShare('twitter')}
+                      className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-primary/10 rounded-md transition-colors"
+                    >
+                      Share on Twitter
+                    </button>
+                    <button
+                      onClick={() => handleShare('whatsapp')}
+                      className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-primary/10 rounded-md transition-colors"
+                    >
+                      Share on WhatsApp
+                    </button>
+                    <button
+                      onClick={handleCopyLink}
+                      className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-primary/10 rounded-md transition-colors flex items-center gap-2"
+                    >
+                      {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      {copied ? 'Copied!' : 'Copy Link'}
+                    </button>
+                  </div>
+                </div>
+              </div>
               <button
                 onClick={onClose}
                 className="p-2 rounded-full glass-light hover:bg-background/95 transition-all duration-200"
