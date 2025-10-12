@@ -6,6 +6,7 @@ import { RecipeCard } from "./RecipeCard";
 import { RecipeModal } from "./RecipeModal";
 import { AuthDialog } from "./AuthDialog";
 import { SettingsDialog } from "./SettingsDialog";
+import { ProfileDialog } from "./ProfileDialog";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { searchRecipes, getRandomRecipes, getRecipeInformation } from "@/lib/spoonacular";
@@ -19,6 +20,7 @@ export const Feastify = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAuthDialogOpen, setIsAuthDialogOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [bookmarkedRecipes, setBookmarkedRecipes] = useState<number[]>([]);
   const [selectedCuisine, setSelectedCuisine] = useState("All");
   const [selectedDiet, setSelectedDiet] = useState("all");
@@ -284,6 +286,14 @@ export const Feastify = () => {
     setIsSettingsOpen(true);
   };
 
+  const handleViewProfile = () => {
+    if (!user) {
+      setIsAuthDialogOpen(true);
+      return;
+    }
+    setIsProfileOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation Bar */}
@@ -411,7 +421,17 @@ export const Feastify = () => {
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
         onSignOut={handleSignOut}
+        onViewProfile={handleViewProfile}
       />
+
+      {/* Profile Dialog */}
+      {user && (
+        <ProfileDialog
+          isOpen={isProfileOpen}
+          onClose={() => setIsProfileOpen(false)}
+          userId={user.id}
+        />
+      )}
     </div>
   );
 };

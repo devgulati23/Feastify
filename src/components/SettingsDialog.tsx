@@ -19,9 +19,10 @@ interface SettingsDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onSignOut: () => void;
+  onViewProfile: () => void;
 }
 
-export const SettingsDialog = ({ isOpen, onClose, onSignOut }: SettingsDialogProps) => {
+export const SettingsDialog = ({ isOpen, onClose, onSignOut, onViewProfile }: SettingsDialogProps) => {
   const [suggestion, setSuggestion] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -131,6 +132,17 @@ export const SettingsDialog = ({ isOpen, onClose, onSignOut }: SettingsDialogPro
           {/* Account Section */}
           <div className="space-y-3">
             <h3 className="font-semibold text-lg">Account</h3>
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => {
+                onViewProfile();
+                onClose();
+              }}
+            >
+              <User className="mr-2 h-4 w-4" />
+              View Profile
+            </Button>
             <Button
               variant="destructive"
               className="w-full"

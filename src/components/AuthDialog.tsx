@@ -17,7 +17,7 @@ import { Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-const authSchema = z.object({
+const loginSchema = z.object({
   email: z
     .string()
     .trim()
@@ -29,7 +29,17 @@ const authSchema = z.object({
     .max(100, { message: "Password must be less than 100 characters" }),
 });
 
-type AuthFormData = z.infer<typeof authSchema>;
+const signupSchema = loginSchema.extend({
+  username: z
+    .string()
+    .trim()
+    .min(3, { message: "Username must be at least 3 characters" })
+    .max(30, { message: "Username must be less than 30 characters" })
+    .regex(/^[a-zA-Z0-9_]+$/, { message: "Username can only contain letters, numbers, and underscores" }),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
+type SignupFormData = z.infer<typeof signupSchema>;
 
 interface AuthDialogProps {
   isOpen: boolean;
@@ -41,21 +51,21 @@ export const AuthDialog = ({ isOpen, onClose }: AuthDialogProps) => {
   const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
   const { toast } = useToast();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<AuthFormData>({
-    resolver: zodResolver(authSchema),
+  const loginForm = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  const signupForm = useForm<SignupFormData>({
+    resolver: zodResolver(signupSchema),
   });
 
   const handleClose = () => {
-    reset();
+    loginForm.reset();
+    signupForm.reset();
     onClose();
   };
 
-  const onSignUp = async (data: AuthFormData) => {
+  const onSignUp = async (data: SignupFormData) => {
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.signUp({
@@ -63,6 +73,9 @@ export const AuthDialog = ({ isOpen, onClose }: AuthDialogProps) => {
         password: data.password,
         options: {
           emailRedirectTo: `${window.location.origin}/`,
+          data: {
+            username: data.username,
+          },
         },
       });
 
@@ -78,6 +91,8 @@ export const AuthDialog = ({ isOpen, onClose }: AuthDialogProps) => {
       
       if (error.message?.includes("already registered")) {
         errorMessage = "This email is already registered. Please login instead.";
+      } else if (error.message?.includes("duplicate key")) {
+        errorMessage = "This username is already taken. Please choose another.";
       }
 
       toast({
@@ -90,7 +105,7 @@ export const AuthDialog = ({ isOpen, onClose }: AuthDialogProps) => {
     }
   };
 
-  const onLogin = async (data: AuthFormData) => {
+  const onLogin = async (data: LoginFormData) => {
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.signInWithPassword({
@@ -122,13 +137,6 @@ export const AuthDialog = ({ isOpen, onClose }: AuthDialogProps) => {
     }
   };
 
-  const onSubmit = (data: AuthFormData) => {
-    if (activeTab === "signup") {
-      onSignUp(data);
-    } else {
-      onLogin(data);
-    }
-  };
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
@@ -149,18 +157,18 @@ export const AuthDialog = ({ isOpen, onClose }: AuthDialogProps) => {
           </TabsList>
 
           <TabsContent value="login" className="mt-6">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="login-email">Email</Label>
                 <Input
                   id="login-email"
                   type="email"
                   placeholder="your@email.com"
-                  {...register("email")}
+                  {...loginForm.register("email")}
                   disabled={isLoading}
                 />
-                {errors.email && (
-                  <p className="text-sm text-destructive">{errors.email.message}</p>
+                {loginForm.formState.errors.email && (
+                  <p className="text-sm text-destructive">{loginForm.formState.errors.email.message}</p>
                 )}
               </div>
 
@@ -170,11 +178,11 @@ export const AuthDialog = ({ isOpen, onClose }: AuthDialogProps) => {
                   id="login-password"
                   type="password"
                   placeholder="••••••••"
-                  {...register("password")}
+                  {...loginForm.register("password")}
                   disabled={isLoading}
                 />
-                {errors.password && (
-                  <p className="text-sm text-destructive">{errors.password.message}</p>
+                {loginForm.formState.errors.password && (
+                  <p className="text-sm text-destructive">{loginForm.formState.errors.password.message}</p>
                 )}
               </div>
 
@@ -192,18 +200,32 @@ export const AuthDialog = ({ isOpen, onClose }: AuthDialogProps) => {
           </TabsContent>
 
           <TabsContent value="signup" className="mt-6">
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={signupForm.handleSubmit(onSignUp)} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="signup-username">Username</Label>
+                <Input
+                  id="signup-username"
+                  type="text"
+                  placeholder="johndoe"
+                  {...signupForm.register("username")}
+                  disabled={isLoading}
+                />
+                {signupForm.formState.errors.username && (
+                  <p className="text-sm text-destructive">{signupForm.formState.errors.username.message}</p>
+                )}
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="signup-email">Email</Label>
                 <Input
                   id="signup-email"
                   type="email"
                   placeholder="your@email.com"
-                  {...register("email")}
+                  {...signupForm.register("email")}
                   disabled={isLoading}
                 />
-                {errors.email && (
-                  <p className="text-sm text-destructive">{errors.email.message}</p>
+                {signupForm.formState.errors.email && (
+                  <p className="text-sm text-destructive">{signupForm.formState.errors.email.message}</p>
                 )}
               </div>
 
@@ -213,11 +235,11 @@ export const AuthDialog = ({ isOpen, onClose }: AuthDialogProps) => {
                   id="signup-password"
                   type="password"
                   placeholder="••••••••"
-                  {...register("password")}
+                  {...signupForm.register("password")}
                   disabled={isLoading}
                 />
-                {errors.password && (
-                  <p className="text-sm text-destructive">{errors.password.message}</p>
+                {signupForm.formState.errors.password && (
+                  <p className="text-sm text-destructive">{signupForm.formState.errors.password.message}</p>
                 )}
               </div>
 
