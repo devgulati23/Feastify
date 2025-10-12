@@ -107,6 +107,11 @@ export const Feastify = () => {
 
   // Apply filters
   useEffect(() => {
+    // Don't apply filters when in bookmarks view
+    if (isBookmarksView) {
+      return;
+    }
+
     let filtered = recipes;
 
     // Cuisine filter
@@ -126,7 +131,7 @@ export const Feastify = () => {
     }
 
     setFilteredRecipes(filtered);
-  }, [recipes, selectedCuisine, selectedDiet]);
+  }, [recipes, selectedCuisine, selectedDiet, isBookmarksView]);
 
   const handleSearch = async (query: string) => {
     setIsLoading(true);
