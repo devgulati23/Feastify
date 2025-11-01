@@ -15,6 +15,17 @@ import { Label } from "@/components/ui/label";
 import { Loader2, User } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+
+const AVATAR_OPTIONS = [
+  "https://api.dicebear.com/7.x/avataaars/svg?seed=avatar-1",
+  "https://api.dicebear.com/7.x/avataaars/svg?seed=avatar-2",
+  "https://api.dicebear.com/7.x/avataaars/svg?seed=avatar-3",
+  "https://api.dicebear.com/7.x/avataaars/svg?seed=avatar-4",
+  "https://api.dicebear.com/7.x/avataaars/svg?seed=avatar-5",
+  "https://api.dicebear.com/7.x/avataaars/svg?seed=avatar-6",
+];
 
 const profileSchema = z.object({
   username: z
@@ -24,6 +35,7 @@ const profileSchema = z.object({
     .max(30, { message: "Username must be less than 30 characters" })
     .regex(/^[a-zA-Z0-9_]+$/, { message: "Username can only contain letters, numbers, and underscores" }),
   email: z.string().email(),
+  avatar_url: z.string(),
 });
 
 type ProfileFormData = z.infer<typeof profileSchema>;
@@ -37,6 +49,7 @@ interface ProfileDialogProps {
 export const ProfileDialog = ({ isOpen, onClose, userId }: ProfileDialogProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
+  const [selectedAvatar, setSelectedAvatar] = useState(AVATAR_OPTIONS[0]);
   const { toast } = useToast();
 
   const {
@@ -45,8 +58,12 @@ export const ProfileDialog = ({ isOpen, onClose, userId }: ProfileDialogProps) =
     formState: { errors },
     reset,
     setValue,
+    watch,
   } = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
+    defaultValues: {
+      avatar_url: AVATAR_OPTIONS[0],
+    },
   });
 
   useEffect(() => {
@@ -58,23 +75,46 @@ export const ProfileDialog = ({ isOpen, onClose, userId }: ProfileDialogProps) =
   const loadProfile = async () => {
     setIsFetching(true);
     try {
+      // Get user email from auth
+      const { data: { user } } = await supabase.auth.getUser();
+      
       const { data, error } = await supabase
         .from("profiles")
-        .select("username, email")
+        .select("username, email, avatar_url")
         .eq("user_id", userId)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
 
       if (data) {
         setValue("username", data.username);
-        setValue("email", data.email || "");
+        setValue("email", data.email || user?.email || "");
+        const avatarUrl = data.avatar_url || AVATAR_OPTIONS[0];
+        setValue("avatar_url", avatarUrl);
+        setSelectedAvatar(avatarUrl);
+      } else {
+        // Profile doesn't exist, create it
+        const defaultAvatar = AVATAR_OPTIONS[Math.floor(Math.random() * AVATAR_OPTIONS.length)];
+        const { error: insertError } = await supabase
+          .from("profiles")
+          .insert({
+            user_id: userId,
+            username: user?.email?.split('@')[0] || 'user',
+            email: user?.email || '',
+            avatar_url: defaultAvatar,
+          });
+
+        if (insertError) throw insertError;
+
+        setValue("username", user?.email?.split('@')[0] || 'user');
+        setValue("email", user?.email || "");
+        setValue("avatar_url", defaultAvatar);
+        setSelectedAvatar(defaultAvatar);
       }
-    } catch (error) {
-      console.error("Failed to load profile:", error);
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: "Failed to load profile data.",
+        description: error.message || "Failed to load profile data.",
         variant: "destructive",
       });
     } finally {
@@ -87,7 +127,10 @@ export const ProfileDialog = ({ isOpen, onClose, userId }: ProfileDialogProps) =
     try {
       const { error } = await supabase
         .from("profiles")
-        .update({ username: data.username })
+        .update({ 
+          username: data.username,
+          avatar_url: selectedAvatar,
+        })
         .eq("user_id", userId);
 
       if (error) {
@@ -136,7 +179,51 @@ export const ProfileDialog = ({ isOpen, onClose, userId }: ProfileDialogProps) =
             <Loader2 className="h-8 w-8 animate-spin text-primary" />
           </div>
         ) : (
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-4">
+            <div className="space-y-3">
+              <Label>Profile Avatar</Label>
+              <div className="flex items-center gap-4 mb-4">
+                <Avatar className="h-20 w-20">
+                  <AvatarImage src={selectedAvatar} alt="Profile avatar" />
+                  <AvatarFallback>
+                    <User className="h-10 w-10" />
+                  </AvatarFallback>
+                </Avatar>
+                <div className="text-sm text-muted-foreground">
+                  Select an avatar below
+                </div>
+              </div>
+              <RadioGroup
+                value={selectedAvatar}
+                onValueChange={setSelectedAvatar}
+                className="grid grid-cols-6 gap-3"
+              >
+                {AVATAR_OPTIONS.map((avatar, index) => (
+                  <Label
+                    key={index}
+                    htmlFor={`avatar-${index}`}
+                    className="cursor-pointer"
+                  >
+                    <RadioGroupItem
+                      value={avatar}
+                      id={`avatar-${index}`}
+                      className="sr-only"
+                    />
+                    <Avatar
+                      className={`h-12 w-12 border-2 transition-all ${
+                        selectedAvatar === avatar
+                          ? "border-primary ring-2 ring-primary ring-offset-2"
+                          : "border-muted hover:border-primary/50"
+                      }`}
+                    >
+                      <AvatarImage src={avatar} alt={`Avatar ${index + 1}`} />
+                      <AvatarFallback>A{index + 1}</AvatarFallback>
+                    </Avatar>
+                  </Label>
+                ))}
+              </RadioGroup>
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="username">Username</Label>
               <Input
