@@ -17,14 +17,20 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import chefAvatar from "@/assets/avatars/chef-avatar.png";
+import pizzaAvatar from "@/assets/avatars/pizza-avatar.png";
+import sushiAvatar from "@/assets/avatars/sushi-avatar.png";
+import cupcakeAvatar from "@/assets/avatars/cupcake-avatar.png";
+import tacoAvatar from "@/assets/avatars/taco-avatar.png";
+import burgerAvatar from "@/assets/avatars/burger-avatar.png";
 
 const AVATAR_OPTIONS = [
-  "https://api.dicebear.com/7.x/avataaars/svg?seed=avatar-1",
-  "https://api.dicebear.com/7.x/avataaars/svg?seed=avatar-2",
-  "https://api.dicebear.com/7.x/avataaars/svg?seed=avatar-3",
-  "https://api.dicebear.com/7.x/avataaars/svg?seed=avatar-4",
-  "https://api.dicebear.com/7.x/avataaars/svg?seed=avatar-5",
-  "https://api.dicebear.com/7.x/avataaars/svg?seed=avatar-6",
+  chefAvatar,
+  pizzaAvatar,
+  sushiAvatar,
+  cupcakeAvatar,
+  tacoAvatar,
+  burgerAvatar,
 ];
 
 const profileSchema = z.object({
