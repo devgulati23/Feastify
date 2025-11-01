@@ -80,6 +80,7 @@ export const Feastify = () => {
         title: "Loading Error",
         description: "Failed to load initial recipes. Please try again.",
         variant: "destructive",
+        duration: 3000,
       });
     }
     setIsLoading(false);
@@ -102,6 +103,7 @@ export const Feastify = () => {
           title: "Error",
           description: "Failed to load the shared recipe.",
           variant: "destructive",
+          duration: 3000,
         });
       }
     }
@@ -146,6 +148,7 @@ export const Feastify = () => {
         toast({
           title: "Search Complete",
           description: `Found ${results.length} recipes for "${query}".`,
+          duration: 3000,
         });
       }
     } catch (error) {
@@ -153,6 +156,7 @@ export const Feastify = () => {
         title: "Search Error",
         description: "Failed to search recipes. Please try again.",
         variant: "destructive",
+        duration: 3000,
       });
     }
     
@@ -165,6 +169,7 @@ export const Feastify = () => {
         title: "Sign In Required",
         description: "Please sign in to bookmark recipes.",
         variant: "destructive",
+        duration: 3000,
       });
       setIsAuthDialogOpen(true);
       return;
@@ -186,6 +191,7 @@ export const Feastify = () => {
         toast({
           title: "Removed from bookmarks",
           description: "Recipe removed from your bookmarks.",
+          duration: 3000,
         });
       } else {
         const { error } = await supabase
@@ -198,6 +204,7 @@ export const Feastify = () => {
         toast({
           title: "Added to bookmarks",
           description: "Recipe added to your bookmarks.",
+          duration: 3000,
         });
       }
     } catch (error) {
@@ -206,6 +213,7 @@ export const Feastify = () => {
         title: "Error",
         description: "Failed to update bookmark. Please try again.",
         variant: "destructive",
+        duration: 3000,
       });
     }
   };
@@ -226,6 +234,7 @@ export const Feastify = () => {
       toast({
         title: "Signed Out",
         description: "Successfully signed out.",
+        duration: 3000,
       });
       setIsSettingsOpen(false);
     } catch (error) {
@@ -233,6 +242,7 @@ export const Feastify = () => {
         title: "Sign Out Error",
         description: "Failed to sign out. Please try again.",
         variant: "destructive",
+        duration: 3000,
       });
     }
   };
@@ -243,6 +253,7 @@ export const Feastify = () => {
         title: "Sign In Required",
         description: "Please sign in to view bookmarks.",
         variant: "destructive",
+        duration: 3000,
       });
       setIsAuthDialogOpen(true);
       return;

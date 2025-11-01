@@ -122,6 +122,7 @@ export const ProfileDialog = ({ isOpen, onClose, userId }: ProfileDialogProps) =
         title: "Error",
         description: error.message || "Failed to load profile data.",
         variant: "destructive",
+        duration: 3000,
       });
     } finally {
       setIsFetching(false);
@@ -149,6 +150,7 @@ export const ProfileDialog = ({ isOpen, onClose, userId }: ProfileDialogProps) =
       toast({
         title: "Profile Updated",
         description: "Your profile has been updated successfully!",
+        duration: 3000,
       });
       onClose();
     } catch (error: any) {
@@ -156,6 +158,7 @@ export const ProfileDialog = ({ isOpen, onClose, userId }: ProfileDialogProps) =
         title: "Update Error",
         description: error.message || "Failed to update profile. Please try again.",
         variant: "destructive",
+        duration: 3000,
       });
     } finally {
       setIsLoading(false);

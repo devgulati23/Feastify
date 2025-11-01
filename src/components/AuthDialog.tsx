@@ -84,6 +84,7 @@ export const AuthDialog = ({ isOpen, onClose }: AuthDialogProps) => {
       toast({
         title: "Account Created",
         description: "Your account has been created successfully!",
+        duration: 3000,
       });
       handleClose();
     } catch (error: any) {
@@ -99,6 +100,7 @@ export const AuthDialog = ({ isOpen, onClose }: AuthDialogProps) => {
         title: "Sign Up Error",
         description: errorMessage,
         variant: "destructive",
+        duration: 3000,
       });
     } finally {
       setIsLoading(false);
@@ -118,6 +120,7 @@ export const AuthDialog = ({ isOpen, onClose }: AuthDialogProps) => {
       toast({
         title: "Welcome Back",
         description: "Successfully signed in!",
+        duration: 3000,
       });
       handleClose();
     } catch (error: any) {
@@ -131,6 +134,7 @@ export const AuthDialog = ({ isOpen, onClose }: AuthDialogProps) => {
         title: "Login Error",
         description: errorMessage,
         variant: "destructive",
+        duration: 3000,
       });
     } finally {
       setIsLoading(false);

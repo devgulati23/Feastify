@@ -33,6 +33,7 @@ export const SettingsDialog = ({ isOpen, onClose, onSignOut, onViewProfile }: Se
         title: "Error",
         description: "Please enter a suggestion",
         variant: "destructive",
+        duration: 3000,
       });
       return;
     }
@@ -52,6 +53,7 @@ export const SettingsDialog = ({ isOpen, onClose, onSignOut, onViewProfile }: Se
       toast({
         title: "Success",
         description: "Thank you for your suggestion!",
+        duration: 3000,
       });
       setSuggestion("");
     } catch (error) {
@@ -60,6 +62,7 @@ export const SettingsDialog = ({ isOpen, onClose, onSignOut, onViewProfile }: Se
         title: "Error",
         description: "Failed to submit suggestion. Please try again.",
         variant: "destructive",
+        duration: 3000,
       });
     } finally {
       setIsSubmitting(false);
