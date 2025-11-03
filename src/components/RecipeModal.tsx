@@ -45,22 +45,33 @@ interface RecipeModalProps {
 
 export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBookmark }: RecipeModalProps) => {
   const [copied, setCopied] = useState(false);
+  const [showShareMenu, setShowShareMenu] = useState(false);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        setShowShareMenu(false);
         onClose();
+      }
+    };
+
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (showShareMenu && !target.closest('.share-menu-container')) {
+        setShowShareMenu(false);
       }
     };
 
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
+      document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, showShareMenu]);
 
   if (!isOpen || !recipe) return null;
 
@@ -75,10 +86,10 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
     try {
       await navigator.clipboard.writeText(recipeUrl);
       setCopied(true);
-      toast.success("Link copied to clipboard!");
+      toast.success("Link copied to clipboard!", { duration: 3000 });
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      toast.error("Failed to copy link");
+      toast.error("Failed to copy link", { duration: 3000 });
     }
   };
 
@@ -132,42 +143,45 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
                   )}
                 />
               </button>
-              <div className="relative group">
+              <div className="relative share-menu-container">
                 <button
+                  onClick={() => setShowShareMenu(!showShareMenu)}
                   className="p-2 rounded-full glass-light hover:bg-background/95 transition-all duration-200"
                 >
                   <Share2 className="w-5 h-5 text-foreground" />
                 </button>
                 {/* Share dropdown */}
-                <div className="absolute right-0 mt-2 w-48 glass rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10">
-                  <div className="p-2 space-y-1">
-                    <button
-                      onClick={() => handleShare('facebook')}
-                      className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-primary/10 rounded-md transition-colors"
-                    >
-                      Share on Facebook
-                    </button>
-                    <button
-                      onClick={() => handleShare('twitter')}
-                      className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-primary/10 rounded-md transition-colors"
-                    >
-                      Share on Twitter
-                    </button>
-                    <button
-                      onClick={() => handleShare('whatsapp')}
-                      className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-primary/10 rounded-md transition-colors"
-                    >
-                      Share on WhatsApp
-                    </button>
-                    <button
-                      onClick={handleCopyLink}
-                      className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-primary/10 rounded-md transition-colors flex items-center gap-2"
-                    >
-                      {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                      {copied ? 'Copied!' : 'Copy Link'}
-                    </button>
+                {showShareMenu && (
+                  <div className="absolute right-0 mt-2 w-48 glass rounded-lg shadow-lg z-10 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="p-2 space-y-1">
+                      <button
+                        onClick={() => { handleShare('facebook'); setShowShareMenu(false); }}
+                        className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-primary/10 rounded-md transition-colors"
+                      >
+                        Share on Facebook
+                      </button>
+                      <button
+                        onClick={() => { handleShare('twitter'); setShowShareMenu(false); }}
+                        className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-primary/10 rounded-md transition-colors"
+                      >
+                        Share on Twitter
+                      </button>
+                      <button
+                        onClick={() => { handleShare('whatsapp'); setShowShareMenu(false); }}
+                        className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-primary/10 rounded-md transition-colors"
+                      >
+                        Share on WhatsApp
+                      </button>
+                      <button
+                        onClick={() => { handleCopyLink(); setShowShareMenu(false); }}
+                        className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-primary/10 rounded-md transition-colors flex items-center gap-2"
+                      >
+                        {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                        {copied ? 'Copied!' : 'Copy Link'}
+                      </button>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
               <button
                 onClick={onClose}
