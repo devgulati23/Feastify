@@ -93,18 +93,41 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
     }
   };
 
-  const handleShare = (platform: string) => {
+  const handleShare = async (platform?: string) => {
     const text = `Check out this recipe: ${recipe.title}`;
-    const url = encodeURIComponent(recipeUrl);
-    const encodedText = encodeURIComponent(text);
 
-    const shareUrls = {
-      facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
-      twitter: `https://twitter.com/intent/tweet?text=${encodedText}&url=${url}`,
-      whatsapp: `https://wa.me/?text=${encodedText}%20${url}`,
-    };
+    // Try Web Share API first (works on mobile and modern browsers)
+    if (!platform && navigator.share) {
+      try {
+        await navigator.share({
+          title: recipe.title,
+          text: text,
+          url: recipeUrl,
+        });
+        toast.success("Shared successfully!", { duration: 3000 });
+        setShowShareMenu(false);
+        return;
+      } catch (err: any) {
+        if (err.name !== 'AbortError') {
+          console.error('Share failed:', err);
+        }
+      }
+    }
 
-    window.open(shareUrls[platform as keyof typeof shareUrls], '_blank', 'noopener,noreferrer');
+    // Fallback to platform-specific sharing
+    if (platform) {
+      const url = encodeURIComponent(recipeUrl);
+      const encodedText = encodeURIComponent(text);
+
+      const shareUrls = {
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${url}`,
+        twitter: `https://twitter.com/intent/tweet?text=${encodedText}&url=${url}`,
+        whatsapp: `https://wa.me/?text=${encodedText}%20${url}`,
+      };
+
+      const shareUrl = shareUrls[platform as keyof typeof shareUrls];
+      window.open(shareUrl, '_blank', 'width=600,height=400');
+    }
   };
 
   return (
@@ -154,6 +177,15 @@ export const RecipeModal = ({ recipe, isOpen, onClose, isBookmarked, onToggleBoo
                 {showShareMenu && (
                   <div className="absolute right-0 mt-2 w-48 glass rounded-lg shadow-lg z-10 animate-in fade-in slide-in-from-top-2 duration-200">
                     <div className="p-2 space-y-1">
+                      {navigator.share && (
+                        <button
+                          onClick={() => handleShare()}
+                          className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-primary/10 rounded-md transition-colors flex items-center gap-2"
+                        >
+                          <Share2 className="w-4 h-4" />
+                          Share
+                        </button>
+                      )}
                       <button
                         onClick={() => { handleShare('facebook'); setShowShareMenu(false); }}
                         className="w-full text-left px-3 py-2 text-sm text-foreground hover:bg-primary/10 rounded-md transition-colors"
