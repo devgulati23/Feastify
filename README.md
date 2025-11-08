@@ -1,73 +1,63 @@
-# Welcome to your Lovable project
+# 🍽️ **Feastify — Intelligent Recipe Finder Web App**
 
-## Project info
+**Feastify** is a smart and user-friendly recipe discovery platform that helps users find delicious recipes based on ingredients they already have.
+The app uses APIs to fetch global recipes and includes powerful filters for cuisine type and dietary preferences, allowing users to personalize their cooking experience.
 
-**URL**: https://lovable.dev/projects/1362ab15-de72-4bfb-b6d4-b564d92c59a8
+---
 
-## How can I edit this code?
+## 🚀 **Features**
 
-There are several ways of editing your application.
+* **Ingredient-Based Search:**
+  Enter the ingredients you have, and Feastify suggests recipes you can cook.
 
-**Use Lovable**
+* **User Accounts:**
+  Each user can create an account to save, manage, and revisit their favorite recipes from any device.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/1362ab15-de72-4bfb-b6d4-b564d92c59a8) and start prompting.
+* **Cuisine & Dietary Filters:**
+  Filter recipes by cuisine (Indian, Italian, etc.) or preference (Vegetarian/Non-Vegetarian).
 
-Changes made via Lovable will be committed automatically to this repo.
+* **Recipe Details:**
+  Get full recipe details including ingredients, steps, preparation time, and nutritional information.
 
-**Use your preferred IDE**
+* **Bookmark Recipes:**
+  Save your favorite recipes to access them anytime.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+* **API Integration:**
+  Integrated with **Spoonacular API** and **Edamam API** for extensive global recipe coverage.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## 🧩 **Tech Stack**
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+| **Category**        | **Technology**              |
+| ------------------- | --------------------------- |
+| **Frontend**        | HTML, CSS, JavaScript, React      |
+| **Backend**         | Supabase JS                  |
+| **Database**        | PostgreSQL                  |
+| **APIs Used**       | Spoonacular API, Edamam API |
+| **Authentication**  | Supabase Auth                |
+| **Version Control** | Git & GitHub                |
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 🔄 **Future Scope**
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+* **Integration with Zepto/Blinkit:**
+  Allow users to order missing ingredients directly from grocery delivery platforms.
 
-**Edit a file directly in GitHub**
+* **AI-Based Personalized Suggestions:**
+  Recommend recipes based on previous cooking history and user ratings.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+* **Voice Search Integration:**
+  Find recipes hands-free with voice commands.
 
-**Use GitHub Codespaces**
+* **Meal Planning & Calorie Tracking:**
+  Suggest daily or weekly meal plans with calorie analysis.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
+## 🧠 **Contributors**
 
-This project is built with:
+* **Dev Gulati** — Project Lead & Full Stack Developer
+* **Team Members:** @Mehak529 and @132006-bhumi
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/1362ab15-de72-4bfb-b6d4-b564d92c59a8) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+---
